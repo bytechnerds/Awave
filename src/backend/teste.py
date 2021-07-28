@@ -10,4 +10,4 @@ from navigationMode import *
 # print(url)
 
 if __name__ == "__main__":
-   findClickables()
+   findEntrys()
