@@ -1,52 +1,137 @@
 #Importar o Requests, ChromeDriver e Beautiful Soup
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
+import re
+
+# METHODS 
+# getData (parseHTML)
+# getHtml
+# getClickables
+# getImages
+# getPlayables
+# getEntrys
+    # getLogin
+    # getSearch
+    # getForms
+# getBlocks
+
 
 html = urlopen(input('Informe o site: '))
 soup = BeautifulSoup(html.read(), 'html.parser')
 
-header = soup.find('header')
+def getClickables():
+    button = soup.find_all('button')
+    button_id = soup.find_all(attrs={'id': re.compile('btn|button', re.IGNORECASE)})
+    button_class = soup.find_all(attrs={'class': re.compile('btn|button', re.IGNORECASE)})
+    links = soup.find_all('a')
+    links_href = soup.find_all(attrs={'href'})
+    submit = soup.find_all(attrs={'type':'submit'})
+    inputButton = soup.find_all(attrs={'type':'button'})
 
-username = soup.find('input', attrs={'type':'username'})
-password = soup.find('input', attrs={'type':'password'})
+    cList = [button, button_id, button_class, links, links_href, submit, inputButton]
+    print(cList)
 
-login = [username, password]
+def getImages():
+    # images as backgrounds
+    images = soup.find_all('img')
+    images_id = soup.find_all(attrs={'id': re.compile('img|image', re.IGNORECASE)})
+    svg = soup.find_all('svg')
+    figures = soup.find_all('figure')
 
-search = soup.find("input", attrs={"type":"search"})
+    iList = [images, images_id, svg, figures]
+    print(iList)
 
-main = soup.find_all('main')
-footer = soup.find('footer')
+def getPlayables():
+    videos = soup.find_all('video')
+    audios = soup.find_all('audio')
 
-tagsList = [header, login, search, main, footer]
+    pList=[videos, audios]
+    print(pList)
 
-print('Header: ', header.get('class'))
+def getLogin():
+    login = []
 
-print('Username: ', username)
+    #BOTÃO DE LOGIN 
+    login_href = soup.find_all(attrs={'href': re.compile(r'login', re.IGNORECASE)})
+    # aria-label="Conta" (imagemzinha do Youtube),
+    login_label = soup.find_all(attrs={'aria-label': re.compile(r'Conta', re.IGNORECASE)})
+    # social login = entrar com Google, Facebook, Apple, Linkedin, Github, <a id="login" ou class>
+    social_login1 = soup.find_all(attrs={'class': re.compile(r'Login', re.IGNORECASE)})
+    social_login2 = soup.find_all(attrs={'id': re.compile(r'login', re.IGNORECASE)})
 
-print('Password: ', password)
+    #CAMPOS (FIELDS DO LOGIN)
+    # input, div, button, nav...
+    # name = "user", name = "email", name = "password", name = "senha", name ="usuario"
+    username_email = soup.find_all('input', attrs={'type':'email'})
+    username_name = soup.find_all(attrs={'name': re.compile(r'user|usuario|email', re.IGNORECASE)})
+    username_class = soup.find_all(attrs={'class': re.compile(r'login|user|usuario|email', re.IGNORECASE)})
+    username_aria = soup.find_all(attrs={'aria-label': re.compile(r'email', re.IGNORECASE)})
 
-print('Search bar:', search)
+    password_type = soup.find_all('input', attrs={'type':'password'})
+    password_name = soup.find_all(attrs={'name': re.compile(r'password|senha', re.IGNORECASE)})
 
-for m in main:
-    print('Main:', m.get('class'))
+    #TESTAR SE NÃO ESTÁ VAZIO
+    def append_to_login(aux):
+        if aux: 
+            login.append(aux)
 
-print('Footer: ',footer.get('class'))
-#Depois adaptar pra pegar a URL que o usuário acessar no navegador (tipo eventListener. Acho que dá pra usar requests)
+    append_to_login(login_href)
+    append_to_login(login_label)
+    append_to_login(social_login1)
+    append_to_login(social_login2)
+    append_to_login(username_email)
+    append_to_login(username_name)
+    append_to_login(username_class)
+    append_to_login(username_aria)
+    append_to_login(password_name)
+    append_to_login(password_type)
 
-#url_do_site = driver.current_url
-#print(url_do_site)
+    print('Login:', login)
 
-#"Baixar o conteúdo todo da página" no formato BeautifulSoup object (nested data structure)
+def getSearch():
+    #regex para achar searchbar sem input type. Aceita: button, div, input com 
+    # class, id, title="Pesquisar" aria-label="Pesquisar"
+    # search = [] 
 
-#Dividir por blocos de hierarquia
+    search = []
+    by_class = soup.find_all(attrs={'class': re.compile(r'search|pesquisa', re.IGNORECASE)})
+    by_id = soup.find_all(attrs={'id': re.compile(r'search|pesquisa', re.IGNORECASE)})
+    by_type = soup.find_all(attrs={'type': re.compile(r'search|pesquisa', re.IGNORECASE)})
+    by_aria = soup.find_all(attrs={'aria-label': re.compile(r'search|pesquisa', re.IGNORECASE)})
+    by_title = soup.find_all(attrs={'title': re.compile(r'search|pesquisa', re.IGNORECASE)})
+    by_role = soup.find_all(attrs={'role': re.compile(r'search|pesquisa', re.IGNORECASE)})
+    by_place = soup.find_all(attrs={'placeholder': re.compile(r'search|pesquisa', re.IGNORECASE)})
 
-#Navegar de um bloco por outro 
+    #TESTAR SE NÃO ESTÁ VAZIO
+    def append_to_search(aux):
+        if aux: 
+            search.append(aux)
 
-# Criar uma lista de elementos que podem estar dentro de uma página e tentar achar eles com o Web Scrapping. Aqueles que forem achados vão ajudar a definir o layout da página.
-# <header>
-# Login / <input>
-# Logo / <a> <img> <svg>
-# Procura / <input>
-# Menu <ul> <li> </ul>
-# <main>
-# <footer> / div class="footer"
+    append_to_search(by_class)
+    append_to_search(by_id)
+    append_to_search(by_type)
+    append_to_search(by_aria)
+    append_to_search(by_title)
+    append_to_search(by_role)
+    append_to_search(by_place)
+        
+    print('Search bar:', search)
+
+#getForms()
+
+def getBlocks():
+    header = soup.find_all('header')
+    header_id = soup.find_all(attrs={'id': re.compile('header', re.IGNORECASE)})
+    header_class = soup.find_all(attrs={'class': re.compile('header', re.IGNORECASE)})
+    
+    main = soup.find_all('main')
+    main_id = soup.find_all(attrs={'id': re.compile('main', re.IGNORECASE)})
+    main_class = soup.find_all(attrs={'class': re.compile('main', re.IGNORECASE)})
+    main_role = soup.find_all(attrs={'role': re.compile('main', re.IGNORECASE)})
+
+    footer = soup.find_all('footer')
+    footer_id = soup.find_all(attrs={'id': re.compile('footer', re.IGNORECASE)})
+    footer_class = soup.find_all(attrs={'class': re.compile('footer', re.IGNORECASE)})
+
+    bList = [header,header_id, header_class, main, main_id, main_class, main_role, footer, footer_id, footer_class]
+    print(bList)
