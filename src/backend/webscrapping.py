@@ -1,23 +1,15 @@
-#Importar o Requests, ChromeDriver e Beautiful Soup
+from os import close
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import re
-
-# METHODS 
-# getData (parseHTML)
-# getHtml
-# getClickables
-# getImages
-# getPlayables
-# getEntrys
-    # getLogin
-    # getSearch
-    # getForms
-# getBlocks
-
+import json
 
 html = urlopen(input('Informe o site: '))
 soup = BeautifulSoup(html.read(), 'html.parser')
+
+#def getData()
+
+#def getHTml()
 
 def getClickables():
     button = soup.find_all('button')
@@ -29,7 +21,36 @@ def getClickables():
     inputButton = soup.find_all(attrs={'type':'button'})
 
     cList = [button, button_id, button_class, links, links_href, submit, inputButton]
-    print(cList)
+    lista = []
+    for c in cList:
+        lista.extend(c)
+    
+    print(len(lista))
+    
+    f = open('clickablesList.json', 'w')
+    
+    f.write("""
+        {
+            "page_title":"",
+            "page_url":"",
+            "elements":[
+                {
+                    "clickables": [
+        """)
+    
+    for l in lista:
+        jsonStr = json.dumps(str(l))
+        f.write(jsonStr+',')
+        print(jsonStr)
+    
+    f.write("""
+                    ]
+                }
+            ]
+        }
+    """)
+
+    f.close()
 
 def getImages():
     # images as backgrounds
