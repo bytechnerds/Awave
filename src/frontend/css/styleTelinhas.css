@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap');
+*{
+	border: none;
+	padding: 0;
+	margin: 0;
+	font-family:'Century Gothic', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+a{
+	text-decoration: none;
+}
+
+.geral{
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.extensao{
+	width: 400px;
+	height: 550px;
+	background: #2B2B2B;
+	margin-top: 2%;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+.extensao h3{
+	color: lightgray;
+}
+
+.extensao img{
+	max-width: 400px;
+	max-height: 200px;
+	border-bottom: 1px solid #fff;
+	margin-top: 10px;
+}
+.aumentarFonte{
+	width: 60%;
+	height: 80px;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+}
+.tamFonte{
+	width: 55px;
+	height: 50px;
+	font-size: 1.5em;
+	font-family: 'Poppins', sans-serif;
+	cursor: pointer;
+	background-color: #3CFFAB;
+}
+.tamFonte:hover{
+	background-color: #138f59;
+}
+.but{
+	background: #329A90;
+	width: 280px;
+	height: 80px;
+	font-size: 1rem;
+	font-family: 'Poppins', sans-serif;
+	color: #fff;
+	border-radius: 30px 30px 30px 0;
+	font-weight: 500;
+	padding-left: 70px;
+	text-align: start;
+	align-items: center;
+	display: flex;
+	margin: 7px 15px;
+	background-repeat: no-repeat;
+	background-position-x: 10px;
+	background-position-y: center;
+	background-size: auto;
+}
+
+.but:hover{
+	background-color: #134D47;
+}
+
+.bt1{
+	background-image: url("../img/descricao.png");
+}
+.bt2{
+	background-image: url("../img/blocos.png");
+}
+.bt3{
+	background-image: url("../img/atalhos.png");
+	margin-bottom: 20px;
+}
+.rodape{
+	border-top: 1px solid #fff;
+	width: 400px;
+	height: 200px;
+	display: flex;
+	align-items: center;
+}
+
+.rodape ol{
+	height: 40px;
+	width: 340px;
+	font-size: 1.2rem;
+	font-family: 'Poppins', sans-serif;
+	color: #fff;
+	font-weight: 300;
+	/* superior | direita | inferior | esquerda */
+	padding: 5px 0 5px 60px;
+	/* margin-left: 20px; */
+	letter-spacing: 1px;
+	background-repeat: no-repeat;
+	background-position-x: 10px;
+	background-position-y: center;
+	align-items: center;
+	background-size: 43px;
+	margin-top: 10px;
+}
+.rodape ol:hover{
+	background-color: #329A90;
+}
+
+#ol1{
+	background-image: url("../img/config.png");
+}
+#ol2{
+	background-image: url("../img/send-feedback-icon.svg");
+}

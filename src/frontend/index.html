@@ -1,18 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="./parsingJson.js"></script>
+	<title>Extensão</title>
+	<link rel="stylesheet" type="text/css" href="./css/styleTelinhas.css">
+	<script src="js/acessibilidade.js"></script>
+	<script src="js/descricao.js"></script>
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="./js/parsingJson.js"></script>
 </head>
+
 <body onload="navigateButtons()">
 
-    <button id='button1' onclick="alert('botão1')">ME TESTA!</button>
-    <button id='button2' onclick="alert('botão2')"> A </button>
-    <button id='button3' onclick="alert('botão3')"> B </button>
-    <button id='button4' onclick="alert('botão4')"> C  </button>
-    
+	<div class="geral">
+		<div class="extensao">
+
+			<img src="./img/logo.png">
+
+			<div class="aumentarFonte">
+				<button class="tamFonte" onClick="fonte('d');">A-</button>
+				<button class="tamFonte" onClick="fonte('n');">A</button>
+				<button class="tamFonte" onClick="fonte('a');">A+</button>
+			</div>
+
+			<a href="#" class="but bt1" onclick="descricao()"> Descrever página completa</a>
+
+
+			<!-- <button class="but bt2">Navegar por blocos</button> -->
+
+			<a href="listaAtalhos.html" class="but bt3" target="_self">Alterar atalhos do teclado</a>
+
+			<footer class="rodape">
+				<ul>
+					<a href="descricaoPag.html"><ol id="ol1">Configurações</ol></a>
+					<a href="construcao.html"><ol id="ol2">Enviar Feedback</ol></a>
+				</ul>
+			</footer>
+			
+		</div>
+	</div>
 </body>
+
 </html>
