@@ -1,15 +1,11 @@
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status == 'complete' && /^http/.test(tab.url)) {
+console.log('background running')
 
-        chrome.scripting.executeScript({
-            target: { tabId: tabId },
-            files: [
-                "./foreground.js"
-            ]
-        })
-            .then(() => {
-                console.log("INJECTED THE FOREGROUND SCRIPT.")
-            })
-            .catch(err => console.log(err))
+chrome.browserAction.onClicked.addListener(buttonClicked)
+
+function buttonClicked(tab){
+    let msg = {
+        txt: 'hello'
     }
-})
+
+    chrome.tabs.sendMessage(tab.id, msg)
+}

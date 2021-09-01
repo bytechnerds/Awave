@@ -10,12 +10,11 @@
 
 	<link rel="stylesheet" type="text/css" href="./css/styleTelinhas.css">
 	<script src="js/acessibilidade.js"></script>
-	<script src="js/descricao.js"></script>
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="./js/parsingJson.js"></script>
 </head>
 
-<body onload="navigateButtons()">
+<body>
 
 	<div class="geral">
 		<div class="extensao">
@@ -28,7 +27,7 @@
 				<button class="tamFonte" onClick="fonte('a');">A+</button>
 			</div>
 
-			<a href="#" class="but bt1" onclick="descricao()"> Descrever página completa</a>
+			<a href="#" class="but bt1" id="description" onclick="descricao()"> Descrever página completa</a>
 
 
 			<!-- <button class="but bt2">Navegar por blocos</button> -->

@@ -1,34 +1,19 @@
 {
+    "manifest_version": 2,
     "name": "Awave",
     "description": "Awave is a browser extension that empowers visual impaired people, giving them more autonomy on navigating through the web.",
-    "author": "bytech",
+    "author": "byTech",
     "version": "0.0.1",
-    "manifest_version": 3,
-    "icons": {
-        "16": "./frontend/img/logo16.png",
-        "32": "./frontend/img/logo32.png",
-        "48": "./frontend/img/logo48.png",
-        "128": "./frontend/img/logo128.png"
-    },
-    "background": {},
-    "action": {
-        "default_title": "Awave",
-        "default_popup": "../frontend/index.html",
-        "default_icons": {
-            "16": "./frontend/img/logo16.png",
-            "32": "./frontend/img/logo32.png",
-            "48": "./frontend/img/logo48.png",
-            "128": "./frontend/img/logo128.png"
+    "content_scripts":[
+        {
+            "matches":["<all_urls>"],
+            "js":["content.js"]
         }
-    },
-    "options_page": "../frontend/listaAtalhos.html",
-    "permissions": [
-        "activeTab",
-        "tabs",
-        "storage",
-        "scripting"
     ],
-    "host_permissions": [
-        "<all_urls>"
-    ]
+    "background":{
+        "scripts":["background.js"]
+    },
+    "browser_action":{
+        "default_icon":"./frontend/img/logo128.png"
+    }
 }
