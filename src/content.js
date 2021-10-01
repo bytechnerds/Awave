@@ -1,7 +1,16 @@
 //This script has all the navigation mode functions (the keyboard shortcuts function and the spcecifc navigation modes) 
 window.addEventListener('load', applyKey)
+
 let synth = window.speechSynthesis;
-let functioning = true
+
+let funcD = true
+let funcB = true
+let funcI = true
+let funcV = true
+let funcL = true
+let funcS = true
+let funcE = true
+let funcM = true
 
 function applyKey(_event_) {
     window.addEventListener("keydown", function (e) {
@@ -15,7 +24,14 @@ function applyKey(_event_) {
 
         if (intCtrlKey && intAltKey) {
             if (intKeyCode === 'KeyD') {
-                if (functioning = true)
+                funcB = false
+                funcI = false
+                funcV = false
+                funcL = false
+                funcS = false
+                funcE = false
+                funcM = false
+                if (funcD = true)
                     description()
 
                 // Map the keyCode in another keyCode not used
@@ -23,7 +39,14 @@ function applyKey(_event_) {
             }
 
             if (intKeyCode === 'KeyB') {
-                if (functioning = true)
+                funcD = false
+                funcI = false
+                funcV = false
+                funcL = false
+                funcS = false
+                funcE = false
+                funcM = false
+                if (funcB = true)
                     navigateButtons()
 
                 // Map the keyCode in another keyCode not used
@@ -31,7 +54,14 @@ function applyKey(_event_) {
             }
 
             if (intKeyCode === 'KeyI') {
-                if (functioning = true)
+                funcD = false
+                funcB = false
+                funcV = false
+                funcL = false
+                funcS = false
+                funcE = false
+                funcM = false
+                if (funcI = true)
                     navigateImages()
 
                 // Map the keyCode in another keyCode not used
@@ -39,7 +69,14 @@ function applyKey(_event_) {
             }
 
             if (intKeyCode === 'KeyV') {
-                if (functioning = true)
+                funcD = false
+                funcB = false
+                funcI = false
+                funcL = false
+                funcS = false
+                funcE = false
+                funcM = false
+                if (funcV = true)
                     navigatePlayables()
 
                 // Map the keyCode in another keyCode not used
@@ -47,7 +84,14 @@ function applyKey(_event_) {
             }
 
             if (intKeyCode === 'KeyL') {
-                if (functioning = true)
+                funcD = false
+                funcB = false
+                funcI = false
+                funcV = false
+                funcS = false
+                funcE = false
+                funcM = false
+                if (funcL = true)
                     navigateLogin()
 
                 // Map the keyCode in another keyCode not used
@@ -55,7 +99,14 @@ function applyKey(_event_) {
             }
 
             if (intKeyCode === 'KeyS') {
-                if (functioning = true)
+                funcD = false
+                funcB = false
+                funcI = false
+                funcV = false
+                funcL = false
+                funcE = false
+                funcM = false
+                if (funcS = true)
                     navigateSearch()
 
                 // Map the keyCode in another keyCode not used
@@ -63,7 +114,14 @@ function applyKey(_event_) {
             }
 
             if (intKeyCode === 'KeyE') {
-                if (functioning = true)
+                funcD = false
+                funcB = false
+                funcI = false
+                funcV = false
+                funcL = false
+                funcS = false
+                funcM = false
+                if (funcE = true)
                     navigateForms()
 
                 // Map the keyCode in another keyCode not used
@@ -71,7 +129,14 @@ function applyKey(_event_) {
             }
 
             if (intKeyCode === 'KeyM') {
-                if (functioning = true)
+                funcD = false
+                funcB = false
+                funcI = false
+                funcV = false
+                funcL = false
+                funcS = false
+                funcE = false
+                if (funcM = true)
                     navigateBlocks()
 
                 // Map the keyCode in another keyCode not used
@@ -79,7 +144,14 @@ function applyKey(_event_) {
             }
 
             if (intKeyCode === 'Space') {
-                functioning = false
+                funcD = false
+                funcB = false
+                funcI = false
+                funcV = false
+                funcL = false
+                funcS = false
+                funcE = false
+                funcM = false
                 console.log('COMANDO CANCELADO')
                 utterThis = new SpeechSynthesisUtterance("Comando Cancelado")
                 synth.speak(utterThis)
@@ -90,17 +162,6 @@ function applyKey(_event_) {
     }, true);
 }
 
-function getHTML() {
-    const list = []
-
-    for (let i of document.body.querySelectorAll('*')) {
-        list.push(i)
-    }
-}
-
-//CRIAR A FUNÇÃO DE NAVIGATE POR CLICÁVEIS, IMAGENS, MÍDIAS, ENTRADA DE DADOS (login, search)
-//CONSEGUIMOS USAR OS REGEX QUE A @ISABELA JÁ TINHA MONTADO PRO OUTRO CÓDIGO?
-
 //TO-DO
 //ADICIONAR UM CONDICIONAL PARA SÓ JOGAR O ELEMENTO NO ARRAY SE ELE ESTIVER VISIVEL
 //ADICIONAR OS TIPOS INPUT SUBMIT. TENHO QUE ADICIONAR TAMBÉM OS LINKS DE MODO GERAL... SE É UM MÉTODO PARA PEGAR CLICÁVEIS NÃO PODEMOS TER SÓ ALGUNS LINKS.
@@ -109,8 +170,8 @@ function navigateButtons() {
     var utterThis = new SpeechSynthesisUtterance("MODO NAVEGAÇÃO POR BOTÕES")
     synth.speak(utterThis)
 
-    const list = []
-    const items = []
+    let list = []
+    let items = []
 
     let regex = new RegExp('(button+)|(btn+)|(botao+)|(botão+)', 'ig')
 
@@ -123,21 +184,22 @@ function navigateButtons() {
     /*Attrs:
     tagname (we used the outerHTML, which gets all the tag and its content), Id, class, type, name, aria-label, role, title, placeholder*/
 
-    for (let j of list) {
-        let itemTagName = j.outerHTML
-        let itemAlt = j.getAttribute('alt')
-        let itemClass = j.getAttribute('class')
-        let itemId = j.getAttribute('id')
-        let itemType = j.getAttribute('type')
-        let itemName = j.getAttribute('name')
-        let itemAriaLabel = j.getAttribute('aria-label')
-        let itemRole = j.getAttribute('role')
-        let itemTitle = j.getAttribute('title')
-        let itemPlaceholder = j.getAttribute('placeholder')
+    for (let i of list) {
+        let itemTagName = i.outerHTML
+        let itemAlt = i.getAttribute('alt')
+        let itemHref = i.getAttribute('href')
+        let itemClass = i.getAttribute('class')
+        let itemId = i.getAttribute('id')
+        let itemType = i.getAttribute('type')
+        let itemName = i.getAttribute('name')
+        let itemAriaLabel = i.getAttribute('aria-label')
+        let itemRole = i.getAttribute('role')
+        let itemTitle = i.getAttribute('title')
+        let itemPlaceholder = i.getAttribute('placeholder')
 
         console.log(itemTagName)
-        if (regex.test(itemTagName)|| regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
-            items.push(j)
+        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemHref) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+            items.push(i)
 
     }
     console.log(items)
@@ -146,7 +208,7 @@ function navigateButtons() {
 
     window.addEventListener("keydown", function (e) {
 
-        if (functioning == true) {
+        if (funcB == true) {
 
             if (e.key === "ArrowRight") {
                 index++
@@ -182,8 +244,8 @@ function navigateImages() {
     var utterThis = new SpeechSynthesisUtterance("MODO NAVEGAÇÃO POR IMAGENS")
     synth.speak(utterThis)
 
-    const list = []
-    const items = []
+    let list = []
+    let items = []
 
     let regex = new RegExp('(img+)|(image+)|(imagem+)', 'ig')
 
@@ -198,6 +260,8 @@ function navigateImages() {
 
     for (let i of list) {
         let itemTagName = i.outerHTML
+        let itemAlt = i.getAttribute('alt')
+        let itemHref = i.getAttribute('href')
         let itemClass = i.getAttribute('class')
         let itemId = i.getAttribute('id')
         let itemType = i.getAttribute('type')
@@ -208,7 +272,7 @@ function navigateImages() {
         let itemPlaceholder = i.getAttribute('placeholder')
 
         console.log(itemTagName)
-        if (regex.test(itemTagName) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemHref) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
             items.push(i)
 
     }
@@ -218,7 +282,7 @@ function navigateImages() {
 
     window.addEventListener("keydown", function (e) {
 
-        if (functioning == true) {
+        if (funcI == true) {
 
             if (e.key === "ArrowRight") {
                 index++
@@ -254,8 +318,8 @@ function navigatePlayables() {
     var utterThis = new SpeechSynthesisUtterance("MODO NAVEGAÇÃO POR MÍDIAS DE REPRODUÇÃO")
     synth.speak(utterThis)
 
-    const list = []
-    const items = []
+    let list = []
+    let items = []
 
     let regex = new RegExp('(video+)|(audio+)|(vid+)|(vídeo+)|(track+)', 'ig')
 
@@ -290,7 +354,7 @@ function navigatePlayables() {
 
     window.addEventListener("keydown", function (e) {
 
-        if (functioning == true) {
+        if (funcV == true) {
 
             if (e.key === "ArrowRight") {
                 index++
@@ -325,10 +389,10 @@ function navigateLogin() {
     console.log('MODO - NAVEGAÇÃO PARA LOGIN')
     var utterThis = new SpeechSynthesisUtterance("MODO NAVEGAÇÃO PARA LOGIN")
     synth.speak(utterThis)
-    
-    const list = []
-    const items = []
-    
+
+    let list = []
+    let items = []
+
     let regex = new RegExp('(login+)|(log in+)|(log on+)|(entrar+)|(entre+)|(acessar+)|(acesso+)|(iniciar+)', 'ig')
 
     for (let i of document.body.querySelectorAll('*')) {
@@ -337,29 +401,30 @@ function navigateLogin() {
         if (i.nodeName == 'FORM' || i.nodeName == 'BUTTON' || i.nodeName == 'A')
             list.push(i)
     }
-    for (let j of list) {
-        let itemTagName = j.outerHTML
-        let itemAlt = j.getAttribute('alt')
-        let itemHref = j.getAttribute('href')
-        let itemClass = j.getAttribute('class')
-        let itemId = j.getAttribute('id')
-        let itemType = j.getAttribute('type')
-        let itemName = j.getAttribute('name')
-        let itemAriaLabel = j.getAttribute('aria-label')
-        let itemRole = j.getAttribute('role')
-        let itemTitle = j.getAttribute('title')
-        let itemPlaceholder = j.getAttribute('placeholder')
+    for (let i of list) {
+        let itemTagName = i.outerHTML
+        let itemAlt = i.getAttribute('alt')
+        let itemHref = i.getAttribute('href')
+        let itemClass = i.getAttribute('class')
+        let itemId = i.getAttribute('id')
+        let itemType = i.getAttribute('type')
+        let itemName = i.getAttribute('name')
+        let itemAriaLabel = i.getAttribute('aria-label')
+        let itemRole = i.getAttribute('role')
+        let itemTitle = i.getAttribute('title')
+        let itemPlaceholder = i.getAttribute('placeholder')
 
-        if (regex.test(itemTagName) || regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
-            items.push(j)
+        console.log(itemTagName)
+        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemHref) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+            items.push(i)
+
     }
-    console.log(items)
 
     let index = -1;
 
     window.addEventListener("keydown", function (e) {
 
-        if (functioning == true) {
+        if (funcL == true) {
 
             if (e.key === "ArrowRight") {
                 index++
@@ -392,6 +457,74 @@ function navigateLogin() {
 
 function navigateSearch() {
 
+    console.log('MODO - NAVEGAÇÃO PARA PESQUISA')
+    var utterThis = new SpeechSynthesisUtterance("MODO NAVEGAÇÃO PARA PESQUISA")
+    synth.speak(utterThis)
+
+    let list = []
+    let items = []
+
+    let regex = new RegExp('(search+)|(pesquisa+)', 'ig')
+
+    for (let i of document.body.querySelectorAll('*')) {
+        if (i.nodeName == 'INPUT' && (i.nodeType == 'TEXT' || i.nodeType == 'SEARCH'))
+            list.push(i)
+        if (i.nodeName == 'FORM' || i.nodeName == 'BUTTON')
+            list.push(i)
+    }
+    for (let i of list) {
+        let itemTagName = i.outerHTML
+        let itemAlt = i.getAttribute('alt')
+        let itemHref = i.getAttribute('href')
+        let itemClass = i.getAttribute('class')
+        let itemId = i.getAttribute('id')
+        let itemType = i.getAttribute('type')
+        let itemName = i.getAttribute('name')
+        let itemAriaLabel = i.getAttribute('aria-label')
+        let itemRole = i.getAttribute('role')
+        let itemTitle = i.getAttribute('title')
+        let itemPlaceholder = i.getAttribute('placeholder')
+
+        console.log(itemTagName)
+        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemHref) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+            items.push(i)
+
+    }
+
+    let index = -1;
+
+    window.addEventListener("keydown", function (e) {
+
+        if (funcL == true) {
+
+            if (e.key === "ArrowRight") {
+                index++
+                if (index > items.length)
+                    index--
+
+                let item = (items[index])
+                item.style.outline = 'none'
+                if (index >= 1)
+                    (items[index - 1]).style.border = 'none'
+                item.style.border = '5px solid red'
+                item.focus()
+            }
+
+            if (e.key === "ArrowLeft") {
+                index--
+                if (index < 0)
+                    index = 0
+
+                let item = (items[index])
+                item.style.outline = 'none'
+                if (index <= 2)
+                    (items[index + 1]).style.border = 'none'
+                item.style.border = '5px solid red'
+                item.focus()
+            }
+        }
+    })
+
 }
 
 function navigateForms() {
@@ -404,7 +537,8 @@ function navigateBlocks() {
 }
 
 function description() {
-    window.alert('A página possui um menu principal no canto superior direito com as opções Gmail, Imagens, e um menu com mais opções escondidas. A sessão de login fica à direita. O site tem uma sessão de busca na parte central, com dois botões (Pesquisa Google e, Estou com sorte). Na tela principal, encontramos a logo do site no centro. Por último, abaixo da seção de pesquisa, as opções de linguagem. No rodapé, temos 3 opções: Configurações, Privacidade e, Termos. Essas nos levam à páginas externas de cada item.')
+    if (funcD == true)
+        window.alert('A página possui um menu principal no canto superior direito com as opções Gmail, Imagens, e um menu com mais opções escondidas. A sessão de login fica à direita. O site tem uma sessão de busca na parte central, com dois botões (Pesquisa Google e, Estou com sorte). Na tela principal, encontramos a logo do site no centro. Por último, abaixo da seção de pesquisa, as opções de linguagem. No rodapé, temos 3 opções: Configurações, Privacidade e, Termos. Essas nos levam à páginas externas de cada item.')
 
 
     //FIX THIS!!!
