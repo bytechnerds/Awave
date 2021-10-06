@@ -68,17 +68,17 @@ function getElementSection(elRectangle) {
 }
 
 
-function checkDomain() {
+function getDomain() {
     return domain = window.location.hostname.split('.').slice(-2).join('.')
 }
 
-function checkLogo(param) {
+function getLogo(param) {
     let regex = new RegExp('(logo+)', 'ig')
     let allElements = []
     let finalList = []
 
     for (let i of param.querySelectorAll('*')) {
-        if (i.nodeName == 'IMG' || i.nodeName == 'SVG' || i.nodeName == 'FIGURE' || i.nodeName == 'I')
+        if (i.nodeName == 'IMG' || i.nodeName == 'SVG' || i.nodeName == 'FIGURE' || i.nodeName == 'I' || i.nodeName == 'A')
             allElements.push(i)
     }
     for (let j of allElements) {
@@ -120,7 +120,7 @@ function checkLogo(param) {
     return true
 }
 
-function checkSearch(param) {
+function getSearch(param) {
 
     let regex = new RegExp('(search+)|(pesquisa+)', 'ig')
     let allElements = []
@@ -173,7 +173,7 @@ function checkSearch(param) {
     return true
 }
 
-function checkLogin(param) {
+function getLogin(param) {
 
     let regex = new RegExp('(login+)|(log in+)|(log on+)|(entrar+)|(entre+)|(acessar+)|(acesso+)|(iniciar+)', 'ig')
     let allElements = []
@@ -227,16 +227,16 @@ function checkLogin(param) {
 
 //FAZER
 //procurar nav.a.a ou nav.ul.li ou div.ul.li ou div.a.a ou span.ul.li ou span.a.a
-function checkMenu(param) {
-    let regex = new RegExp('(menu+)', 'ig')
+function getMenu(param) {
+    let regex = new RegExp('(menu+)|(nav+)|(section+)|(list+)', 'ig')
     let menu = []
     let finalList = []
 
 
     for (let i of param.querySelectorAll('*')) {
-        if (i.nodeName == 'NAV' )
+        if (i.nodeName == 'NAV')
             finalList.push(i)
-        else if (i.nodeName == 'DIV' || i.nodeName == 'BUTTON' || i.nodeName == 'A' || i.nodeName == 'SPAN')
+        else if (i.nodeName == 'DIV' || i.nodeName == 'BUTTON' || i.nodeName == 'A' || i.nodeName == 'SPAN' || (i.nodeName = 'UL'))
             menu.push(i)
     }
 
@@ -253,6 +253,88 @@ function checkMenu(param) {
         if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle))
             finalList.push(m)
     }
+    console.log(finalList)
+
+    el = finalList[0]
+    const elRectangle = el.getBoundingClientRect();
+
+    let coordenadas = elRectangle
+    let tamanhoH = elRectangle.right - elRectangle.left
+    let tamanhoV = elRectangle.bottom - elRectangle.top
+
+    createSections()
+    let section = getElementSection(elRectangle)
+    let position = getElementPosition(elRectangle)
+
+    console.log(coordenadas)
+    console.log(tamanhoH)
+    console.log(tamanhoV)
+    console.log(section)
+    console.log(position)
+    if (el == null)
+        return false
+
+    return true
+}
+//class='social'
+//pegar os a e ver se tem um nome (facebook, twitter, linkedin, whatsapp, instagram, youtube)
+function getSocial(param) {
+    let regex = new RegExp('(social+)|(sociais+)|(media+)|(midia+)|(mídia+)', 'ig')
+    let allElements = []
+    let finalList = []
+
+    for (let i of param.querySelectorAll('*')) {
+        if (i.nodeName == 'IMG' || i.nodeName == 'SVG' || i.nodeName == 'FIGURE' || i.nodeName == 'I' || i.nodeName == 'A')
+            allElements.push(i)
+    }
+    for (let j of allElements) {
+        let itemTagName = j.outerHTML
+        let itemAlt = j.getAttribute('alt')
+        let itemClass = j.getAttribute('class')
+        let itemId = j.getAttribute('id')
+        let itemType = j.getAttribute('type')
+        let itemName = j.getAttribute('name')
+        let itemAriaLabel = j.getAttribute('aria-label')
+        let itemRole = j.getAttribute('role')
+        let itemTitle = j.getAttribute('title')
+        let itemPlaceholder = j.getAttribute('placeholder')
+
+        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+            finalList.push(j)
+
+    }
+    console.log(finalList)
+
+    el = finalList[0]
+    const elRectangle = el.getBoundingClientRect();
+
+    let coordenadas = elRectangle
+    let tamanhoH = elRectangle.right - elRectangle.left
+    let tamanhoV = elRectangle.bottom - elRectangle.top
+
+    createSections()
+    let section = getElementSection(elRectangle)
+    let position = getElementPosition(elRectangle)
+
+    console.log(coordenadas)
+    console.log(tamanhoH)
+    console.log(tamanhoV)
+    console.log(section)
+    console.log(position)
+    if (el == null)
+        return false
+    return true
+}
+
+function getForms(param) {
+    let finalList = []
+
+    for (let i of param.querySelectorAll('*')) {
+        if (i.nodeName == 'INPUT' || i.nodeName == 'FORM' || (i.nodeName == 'BUTTON' && i.nodeType == 'SUBMIT'))
+            finalList.push(i)
+    }
+
+    console.log(finalList)
 
     el = finalList[0]
     const elRectangle = el.getBoundingClientRect();
@@ -276,8 +358,7 @@ function checkMenu(param) {
     return true
 }
 
-//FAZER
-function checkHeader() {
+function getHeader() {
     let regex = new RegExp('(header+)|(cabecalho+)|(cabeçalho+)', 'ig')
     let allElements = []
     let finalList = []
@@ -286,11 +367,11 @@ function checkHeader() {
         if (i.nodeName == 'HEADER') {
             finalList.push(i)
             param = document.querySelector('.' + i.getAttribute('class'))
-            let logo = checkLogo(param)
-            let login = checkLogin(param)
-            let search = checkSearch(param)
-            let nav = checkMenu(param)
-            let info = [logo, nav, login, search]
+            let logo = getLogo(param)
+            let login = getLogin(param)
+            let search = getSearch(param)
+            let nav = getMenu(param)
+            let info = [logo, nav, login, search, media]
             return info
         }
         else if (i.nodeName == 'DIV')
@@ -313,24 +394,28 @@ function checkHeader() {
         let itemTitle = j.getAttribute('title')
         let itemPlaceholder = j.getAttribute('placeholder')
 
-        if (regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+        if (regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder)) {
             finalList.push(j)
+
+            param = document.querySelector('.' + j.getAttribute('class'))
+            let logo = getLogo(param)
+            let login = getLogin(param)
+            let search = getSearch(param)
+            let nav = getMenu(param)
+            let info = [logo, nav, login, search, media]
+            return info
+        }
     }
     console.log(finalList)
-
-    //criar a lógica de qual a div que vamos pegar do finalList
-    //passar a div que pegamos sendo o valor do i no param
-    param = document.querySelector('.' + i.getAttribute('class'))
-    return checkLogo(param)
 }
 
-function checkMain() {
-    let regex = new RegExp('(main+)|(principal+)|(footer+)|(rodapé+)|(rodape+)|(header+)|(cabecalho+)|(cabeçalho+)', 'ig')
+function getMain() {
+    let regex = new RegExp('(main+)|(principal+)', 'ig')
     let allElements = []
     let finalList = []
 
     for (let i of document.body.querySelectorAll('*')) {
-        if (i.nodeName == 'HEADER' || i.nodeName == 'MAIN' || i.nodeName == 'FOOTER' || i.nodeName == 'DIV' || i.nodeName == 'SECTION' || i.nodeName == 'ARTICLE' || i.nodeName == 'NAV')
+        if (i.nodeName == 'MAIN' || i.nodeName == 'DIV' || i.nodeName == 'SECTION' || i.nodeName == 'ARTICLE')
             allElements.push(i)
     }
 
@@ -353,50 +438,50 @@ function checkMain() {
     console.log(finalList)
 }
 
-function checkFooter() {
+function getFooter() {
     let regex = new RegExp('(rodape+)|(footer+)|(rodapé+)', 'ig')
-    let allElements = []
     let finalList = []
 
     for (let i of document.body.querySelectorAll('*')) {
         if (i.nodeName == 'FOOTER') {
             finalList.push(i)
             param = document.querySelector('.' + i.getAttribute('class'))
-            //media (svg ou links de redes sociais) -> vem do método de links de redes sociais
+            let social = getSocial(param)
+            let menu = getMenu(param)
+            let info = [social, menu]
+            return info
             //div.ul.li.a -> vem do método de menu
-            let info = []
+        }
+        else if (i.nodeName == 'DIV') {
+
+            let itemAlt = i.getAttribute('alt')
+            let itemHref = i.getAttribute('href')
+            let itemClass = i.getAttribute('class')
+            let itemId = i.getAttribute('id')
+            let itemType = i.getAttribute('type')
+            let itemName = i.getAttribute('name')
+            let itemAriaLabel = i.getAttribute('aria-label')
+            let itemRole = i.getAttribute('role')
+            let itemTitle = i.getAttribute('title')
+            let itemPlaceholder = i.getAttribute('placeholder')
+
+            if (regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder)) {
+                finalList.push(i)
+                console.log(i)
+                console.log(i.getAttribute('class'))
+                console.log(i.getAttribute('id'))
+                param = document.querySelector('.' + i.getAttribute('class'))
+            }
+            let social = getSocial(param)
+            let menu = getMenu(param)
+            let form = getForms(param)
+            let info = [social, menu, form]
             return info
         }
-        else if (i.nodeName == 'DIV')
-            allElements.push(i)
-
-
-    }
-    console.log(allElements)
-
-    for (let j of allElements) {
-        //let itemTagName = j.outerHTML
-        let itemAlt = j.getAttribute('alt')
-        let itemHref = j.getAttribute('href')
-        let itemClass = j.getAttribute('class')
-        let itemId = j.getAttribute('id')
-        let itemType = j.getAttribute('type')
-        let itemName = j.getAttribute('name')
-        let itemAriaLabel = j.getAttribute('aria-label')
-        let itemRole = j.getAttribute('role')
-        let itemTitle = j.getAttribute('title')
-        let itemPlaceholder = j.getAttribute('placeholder')
-
-        if (regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
-            finalList.push(j)
     }
     console.log(finalList)
-
-    //criar a lógica de qual a div que vamos pegar do finalList
-    //passar a div que pegamos sendo o valor do i no param
-    param = document.querySelector('.' + i.getAttribute('class'))
-    return checkLogo(param)
 }
+
 //FAZER
 function generateDescription(logo) {
     logo.forEach(function () {

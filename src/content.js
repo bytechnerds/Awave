@@ -12,6 +12,21 @@ let funcS = true
 let funcE = true
 let funcM = true
 
+function activateDescription() {
+    chrome.runtime.onMessage.addListener(
+        function(request, sender, sendResponse) {
+          console.log(sender.tab ?
+                      "from a content script:" + sender.tab.url :
+                      "from the extension");
+          if (request.action === "activate_description"){
+              description()
+              sendResponse({farewell: "description was activated"});
+          }
+        }
+      );
+}
+
+
 function applyKey(_event_) {
     window.addEventListener("keydown", function (e) {
         console.log(`KeyboardEvent: key='${e.key}' | code='${e.code}'`)
@@ -47,7 +62,7 @@ function applyKey(_event_) {
                 funcE = false
                 funcM = false
                 if (funcB = true)
-                    navigateButtons()
+                    navigateClickables()
 
                 // Map the keyCode in another keyCode not used
                 e.code = intKeyCode = REMAP_KEY_T;
@@ -165,26 +180,23 @@ function applyKey(_event_) {
 //TO-DO
 //ADICIONAR UM CONDICIONAL PARA SÓ JOGAR O ELEMENTO NO ARRAY SE ELE ESTIVER VISIVEL
 //ADICIONAR OS TIPOS INPUT SUBMIT. TENHO QUE ADICIONAR TAMBÉM OS LINKS DE MODO GERAL... SE É UM MÉTODO PARA PEGAR CLICÁVEIS NÃO PODEMOS TER SÓ ALGUNS LINKS.
-function navigateButtons() {
-    console.log('MODO - NAVEGAÇÃO POR BOTÕES')
-    var utterThis = new SpeechSynthesisUtterance("MODO NAVEGAÇÃO POR BOTÕES")
+function navigateClickables() {
+    console.log('MODO - NAVEGAÇÃO POR ELEMENTOS CLICÁVEIS')
+    var utterThis = new SpeechSynthesisUtterance("MODO NAVEGAÇÃO POR ELEMENTOS CLICÁVEIS")
     synth.speak(utterThis)
 
-    let list = []
     let items = []
 
-    let regex = new RegExp('(button+)|(btn+)|(botao+)|(botão+)', 'ig')
-
     for (let i of document.body.querySelectorAll('*')) {
-        if (i.nodeName == 'BUTTON' || i.nodeName == 'A') {
-            list.push(i)
+        if (i.nodeName == 'BUTTON' || i.nodeName == 'A' || (i.nodeName == 'INPUT' && i.getAttribute('type') == 'submit')) {
+            items.push(i)
         }
     }
 
-    /*Attrs:
-    tagname (we used the outerHTML, which gets all the tag and its content), Id, class, type, name, aria-label, role, title, placeholder*/
+    console.log(items)
 
-    for (let i of list) {
+    let regex = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
+    for (let i of items) {
         let itemTagName = i.outerHTML
         let itemAlt = i.getAttribute('alt')
         let itemHref = i.getAttribute('href')
@@ -197,10 +209,21 @@ function navigateButtons() {
         let itemTitle = i.getAttribute('title')
         let itemPlaceholder = i.getAttribute('placeholder')
 
-        console.log(itemTagName)
         if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemHref) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
-            items.push(i)
+            items.pop(i)
 
+        let itemAriaHidden = i.getAttribute('aria-hidden')
+        let itemAriaExpanded = i.getAttribute('aria-expanded')
+
+        if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+            items.pop(i)
+
+        let itemTabIndex = i.getAttribute('tabindex')
+
+        if (itemTabIndex != '0') {
+            console.log(i + " " + itemTabIndex)
+            items.pop(i)
+        }
     }
     console.log(items)
 
@@ -217,9 +240,11 @@ function navigateButtons() {
 
                 let item = (items[index])
                 item.style.outline = 'none'
+                item.style.border = '5px solid red'
+
                 if (index >= 1)
                     (items[index - 1]).style.border = 'none'
-                item.style.border = '5px solid red'
+
                 item.focus()
             }
 
@@ -230,9 +255,10 @@ function navigateButtons() {
 
                 let item = (items[index])
                 item.style.outline = 'none'
-                if (index <= 2)
-                    (items[index + 1]).style.border = 'none'
                 item.style.border = '5px solid red'
+                
+                if (index >=0)
+                    (items[index + 1]).style.border = 'none'
                 item.focus()
             }
         }
@@ -284,6 +310,7 @@ function navigateImages() {
 
         if (funcI == true) {
 
+            
             if (e.key === "ArrowRight") {
                 index++
                 if (index > items.length)
@@ -291,9 +318,11 @@ function navigateImages() {
 
                 let item = (items[index])
                 item.style.outline = 'none'
+                item.style.border = '5px solid red'
+
                 if (index >= 1)
                     (items[index - 1]).style.border = 'none'
-                item.style.border = '5px solid red'
+
                 item.focus()
             }
 
@@ -304,11 +333,13 @@ function navigateImages() {
 
                 let item = (items[index])
                 item.style.outline = 'none'
-                if (index <= 2)
-                    (items[index + 1]).style.border = 'none'
                 item.style.border = '5px solid red'
+                
+                if (index >=0)
+                    (items[index + 1]).style.border = 'none'
                 item.focus()
             }
+
         }
     })
 }
@@ -356,6 +387,7 @@ function navigatePlayables() {
 
         if (funcV == true) {
 
+            
             if (e.key === "ArrowRight") {
                 index++
                 if (index > items.length)
@@ -363,9 +395,11 @@ function navigatePlayables() {
 
                 let item = (items[index])
                 item.style.outline = 'none'
+                item.style.border = '5px solid red'
+
                 if (index >= 1)
                     (items[index - 1]).style.border = 'none'
-                item.style.border = '5px solid red'
+
                 item.focus()
             }
 
@@ -376,9 +410,10 @@ function navigatePlayables() {
 
                 let item = (items[index])
                 item.style.outline = 'none'
-                if (index <= 2)
-                    (items[index + 1]).style.border = 'none'
                 item.style.border = '5px solid red'
+                
+                if (index >=0)
+                    (items[index + 1]).style.border = 'none'
                 item.focus()
             }
         }
@@ -426,6 +461,7 @@ function navigateLogin() {
 
         if (funcL == true) {
 
+            
             if (e.key === "ArrowRight") {
                 index++
                 if (index > items.length)
@@ -433,9 +469,11 @@ function navigateLogin() {
 
                 let item = (items[index])
                 item.style.outline = 'none'
+                item.style.border = '5px solid red'
+
                 if (index >= 1)
                     (items[index - 1]).style.border = 'none'
-                item.style.border = '5px solid red'
+
                 item.focus()
             }
 
@@ -446,9 +484,10 @@ function navigateLogin() {
 
                 let item = (items[index])
                 item.style.outline = 'none'
-                if (index <= 2)
-                    (items[index + 1]).style.border = 'none'
                 item.style.border = '5px solid red'
+                
+                if (index >=0)
+                    (items[index + 1]).style.border = 'none'
                 item.focus()
             }
         }
@@ -497,6 +536,7 @@ function navigateSearch() {
 
         if (funcL == true) {
 
+           
             if (e.key === "ArrowRight") {
                 index++
                 if (index > items.length)
@@ -504,9 +544,11 @@ function navigateSearch() {
 
                 let item = (items[index])
                 item.style.outline = 'none'
+                item.style.border = '5px solid red'
+
                 if (index >= 1)
                     (items[index - 1]).style.border = 'none'
-                item.style.border = '5px solid red'
+
                 item.focus()
             }
 
@@ -517,9 +559,10 @@ function navigateSearch() {
 
                 let item = (items[index])
                 item.style.outline = 'none'
-                if (index <= 2)
-                    (items[index + 1]).style.border = 'none'
                 item.style.border = '5px solid red'
+                
+                if (index >=0)
+                    (items[index + 1]).style.border = 'none'
                 item.focus()
             }
         }
