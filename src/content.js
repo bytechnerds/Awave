@@ -1,600 +1,588 @@
-//This script has all the navigation mode functions (the keyboard shortcuts function and the spcecifc navigation modes) 
-window.addEventListener('load', applyKey)
+let param
+let width, height, wPixel, hPixel
+let w1, w2, w3, w4, w5, h1, h2, h3
 
-let synth = window.speechSynthesis;
+function getSize() {
+    width = window.innerWidth || document.documentElement.clientWidth ||
+        document.body.clientWidth;
+    height = window.innerHeight || document.documentElement.clientHeight ||
+        document.body.clientHeight;
+    console.log(width, height);
+}
 
-let funcD = true
-let funcB = true
-let funcI = true
-let funcV = true
-let funcL = true
-let funcS = true
-let funcE = true
-let funcM = true
+function createSections() {
+    width = window.innerWidth || document.documentElement.clientWidth ||
+        document.body.clientWidth;
+    height = window.innerHeight || document.documentElement.clientHeight ||
+        document.body.clientHeight;
+    console.log(width, height);
 
-function activateDescription() {
-    chrome.runtime.onMessage.addListener(
-        function(request, sender, sendResponse) {
-          console.log(sender.tab ?
-                      "from a content script:" + sender.tab.url :
-                      "from the extension");
-          if (request.action === "activate_description"){
-              description()
-              sendResponse({farewell: "description was activated"});
-          }
-        }
-      );
+    wPixel = width * 0.2
+    let w3Pixel = width * 0.6
+    w1 = [0, wPixel]
+    w2 = [wPixel + 1, w3Pixel]
+    w3 = [w3Pixel + 1, (wPixel + w3Pixel)]
+
+    hPixel = height * 0.2
+    let h3Pixel = height * 0.6
+    h1 = [0, hPixel]
+    h2 = [hPixel + 1, h3Pixel]
+    h3 = [h3Pixel + 1, (hPixel + h3Pixel)]
+}
+
+function getElementPosition(elRectangle) {
+    return {
+        left: elRectangle.left,
+        right: elRectangle.right,
+        top: elRectangle.top,
+        bottom: elRectangle.bottom
+    };
+}
+
+//adicionar condicional, se o elRectangle.left estiver na esquerda, e o elRectangle.right na direita, ele ocupa a página toda, então devemos apenas verificar a posição vertical e passar a mensagem.
+function getElementSection(elRectangle) {
+    if (Math.sign((elRectangle.left - w1[1]) < 0) && (elRectangle.right - w1[1] < 100)) {
+        if (Math.sign((elRectangle.bottom - w1[1]) < 1))
+            return 'Sessão 1 -- Canto Esquerdo Superior'
+        else if (Math.sign((elRectangle.bottom - w2[1]) < 1))
+            return 'Sessão 2 -- Canto Esquerdo Central'
+        else
+            return 'Sessão 3 -- Canto Esquerdo Inferior'
+    }
+    else if (Math.sign((elRectangle.left - w2[1]) < 0) && (elRectangle.right - w2[1] < 100)) {
+        if (Math.sign((elRectangle.bottom - w1[1]) < 1))
+            return 'Sessão 1 -- Centro Superior'
+        else if (Math.sign((elRectangle.bottom - w2[1]) < 1))
+            return 'Sessão 2 -- Centro'
+        else
+            return 'Sessão 3 -- Centro Inferior'
+    }
+    else {
+        if (Math.sign((elRectangle.bottom - w1[1]) < 1))
+            return 'Sessão 1 -- Canto Direito Superior'
+        else if (Math.sign((elRectangle.bottom - w2[1]) < 1))
+            return 'Sessão 2 -- Canto Direito Central'
+        else
+            return 'Sessão 3 -- Canto Direito Inferior'
+    }
 }
 
 
-function applyKey(_event_) {
-    window.addEventListener("keydown", function (e) {
-        console.log(`KeyboardEvent: key='${e.key}' | code='${e.code}'`)
-
-        let intKeyCode = e.code;
-        let intAltKey = 'AltLeft';
-        let intCtrlKey = 'ControlLeft';
-        let REMAP_KEY_T = 5019
-
-
-        if (intCtrlKey && intAltKey) {
-            if (intKeyCode === 'KeyD') {
-                funcB = false
-                funcI = false
-                funcV = false
-                funcL = false
-                funcS = false
-                funcE = false
-                funcM = false
-                if (funcD = true)
-                    description()
-
-                // Map the keyCode in another keyCode not used
-                e.code = intKeyCode = REMAP_KEY_T;
-            }
-
-            if (intKeyCode === 'KeyB') {
-                funcD = false
-                funcI = false
-                funcV = false
-                funcL = false
-                funcS = false
-                funcE = false
-                funcM = false
-                if (funcB = true)
-                    navigateClickables()
-
-                // Map the keyCode in another keyCode not used
-                e.code = intKeyCode = REMAP_KEY_T;
-            }
-
-            if (intKeyCode === 'KeyI') {
-                funcD = false
-                funcB = false
-                funcV = false
-                funcL = false
-                funcS = false
-                funcE = false
-                funcM = false
-                if (funcI = true)
-                    navigateImages()
-
-                // Map the keyCode in another keyCode not used
-                e.code = intKeyCode = REMAP_KEY_T;
-            }
-
-            if (intKeyCode === 'KeyV') {
-                funcD = false
-                funcB = false
-                funcI = false
-                funcL = false
-                funcS = false
-                funcE = false
-                funcM = false
-                if (funcV = true)
-                    navigatePlayables()
-
-                // Map the keyCode in another keyCode not used
-                e.code = intKeyCode = REMAP_KEY_T;
-            }
-
-            if (intKeyCode === 'KeyL') {
-                funcD = false
-                funcB = false
-                funcI = false
-                funcV = false
-                funcS = false
-                funcE = false
-                funcM = false
-                if (funcL = true)
-                    navigateLogin()
-
-                // Map the keyCode in another keyCode not used
-                e.code = intKeyCode = REMAP_KEY_T;
-            }
-
-            if (intKeyCode === 'KeyS') {
-                funcD = false
-                funcB = false
-                funcI = false
-                funcV = false
-                funcL = false
-                funcE = false
-                funcM = false
-                if (funcS = true)
-                    navigateSearch()
-
-                // Map the keyCode in another keyCode not used
-                e.code = intKeyCode = REMAP_KEY_T;
-            }
-
-            if (intKeyCode === 'KeyE') {
-                funcD = false
-                funcB = false
-                funcI = false
-                funcV = false
-                funcL = false
-                funcS = false
-                funcM = false
-                if (funcE = true)
-                    navigateForms()
-
-                // Map the keyCode in another keyCode not used
-                e.code = intKeyCode = REMAP_KEY_T;
-            }
-
-            if (intKeyCode === 'KeyM') {
-                funcD = false
-                funcB = false
-                funcI = false
-                funcV = false
-                funcL = false
-                funcS = false
-                funcE = false
-                if (funcM = true)
-                    navigateBlocks()
-
-                // Map the keyCode in another keyCode not used
-                e.code = intKeyCode = REMAP_KEY_T;
-            }
-
-            if (intKeyCode === 'Space') {
-                funcD = false
-                funcB = false
-                funcI = false
-                funcV = false
-                funcL = false
-                funcS = false
-                funcE = false
-                funcM = false
-                console.log('COMANDO CANCELADO')
-                utterThis = new SpeechSynthesisUtterance("Comando Cancelado")
-                synth.speak(utterThis)
-            }
-        }
-
-
-    }, true);
+function getDomain() {
+    return domain = window.location.hostname.split('.').slice(-2).join('.')
 }
 
-//TO-DO
-//ADICIONAR UM CONDICIONAL PARA SÓ JOGAR O ELEMENTO NO ARRAY SE ELE ESTIVER VISIVEL
-//ADICIONAR OS TIPOS INPUT SUBMIT. TENHO QUE ADICIONAR TAMBÉM OS LINKS DE MODO GERAL... SE É UM MÉTODO PARA PEGAR CLICÁVEIS NÃO PODEMOS TER SÓ ALGUNS LINKS.
-function navigateClickables() {
-    console.log('MODO - NAVEGAÇÃO POR ELEMENTOS CLICÁVEIS')
-    var utterThis = new SpeechSynthesisUtterance("MODO NAVEGAÇÃO POR ELEMENTOS CLICÁVEIS")
-    synth.speak(utterThis)
+function getLogo(param) {
+    console.log('Função getLogo()')
+    let regex = new RegExp('(logo+)', 'ig')
+    let allElements = []
+    let finalList = []
 
-    let items = []
-
-    for (let i of document.body.querySelectorAll('*')) {
-        if (i.nodeName == 'BUTTON' || i.nodeName == 'A' || (i.nodeName == 'INPUT' && i.getAttribute('type') == 'submit')) {
-            items.push(i)
-        }
+    for (let i of param.querySelectorAll('*')) {
+        if (i.nodeName == 'IMG' || i.nodeName == 'SVG' || i.nodeName == 'FIGURE' || i.nodeName == 'I' || i.nodeName == 'A')
+            allElements.push(i)
     }
+    for (let j of allElements) {
+        let itemTagName = j.outerHTML
+        let itemAlt = j.getAttribute('alt')
+        let itemClass = j.getAttribute('class')
+        let itemId = j.getAttribute('id')
+        let itemType = j.getAttribute('type')
+        let itemName = j.getAttribute('name')
+        let itemAriaLabel = j.getAttribute('aria-label')
+        let itemRole = j.getAttribute('role')
+        let itemTitle = j.getAttribute('title')
+        let itemPlaceholder = j.getAttribute('placeholder')
 
-    console.log(items)
-
-    let regex = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
-    for (let i of items) {
-        let itemTagName = i.outerHTML
-        let itemAlt = i.getAttribute('alt')
-        let itemHref = i.getAttribute('href')
-        let itemClass = i.getAttribute('class')
-        let itemId = i.getAttribute('id')
-        let itemType = i.getAttribute('type')
-        let itemName = i.getAttribute('name')
-        let itemAriaLabel = i.getAttribute('aria-label')
-        let itemRole = i.getAttribute('role')
-        let itemTitle = i.getAttribute('title')
-        let itemPlaceholder = i.getAttribute('placeholder')
-
-        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemHref) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
-            items.pop(i)
-
-        let itemAriaHidden = i.getAttribute('aria-hidden')
-        let itemAriaExpanded = i.getAttribute('aria-expanded')
-
-        if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
-            items.pop(i)
-
-        let itemTabIndex = i.getAttribute('tabindex')
-
-        if (itemTabIndex != '0') {
-            console.log(i + " " + itemTabIndex)
-            items.pop(i)
-        }
+        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+            finalList.push(j)
     }
-    console.log(items)
+    console.log(finalList)
 
-    let index = -1;
+    el = finalList[0]
+    try {
+        const elRectangle = el.getBoundingClientRect();
 
-    window.addEventListener("keydown", function (e) {
+        let coordenadas = elRectangle
+        let tamanhoH = elRectangle.right - elRectangle.left
+        let tamanhoV = elRectangle.bottom - elRectangle.top
 
-        if (funcB == true) {
+        createSections()
+        let section = getElementSection(elRectangle)
+        let position = getElementPosition(elRectangle)
 
-            if (e.key === "ArrowRight") {
-                index++
-                if (index > items.length)
-                    index--
-
-                let item = (items[index])
-                item.style.outline = 'none'
-                item.style.border = '5px solid red'
-
-                if (index >= 1)
-                    (items[index - 1]).style.border = 'none'
-
-                item.focus()
-            }
-
-            if (e.key === "ArrowLeft") {
-                index--
-                if (index < 0)
-                    index = 0
-
-                let item = (items[index])
-                item.style.outline = 'none'
-                item.style.border = '5px solid red'
-                
-                if (index >=0)
-                    (items[index + 1]).style.border = 'none'
-                item.focus()
-            }
-        }
-    })
+        console.log(coordenadas)
+        console.log(tamanhoH)
+        console.log(tamanhoV)
+        console.log(section)
+        console.log(position)
+        let resultLogo = [true, coordenadas, tamanhoH, tamanhoV, section, position]
+        return resultLogo
+    } catch (error) {
+        return false
+    }
 }
 
-function navigateImages() {
-    console.log('MODO - NAVEGAÇÃO POR IMAGENS')
-    var utterThis = new SpeechSynthesisUtterance("MODO NAVEGAÇÃO POR IMAGENS")
-    synth.speak(utterThis)
-
-    let list = []
-    let items = []
-
-    let regex = new RegExp('(img+)|(image+)|(imagem+)', 'ig')
-
-    for (let i of document.body.querySelectorAll('*')) {
-        if (i.nodeName == 'IMG' || i.nodeName == 'SVG' || i.nodeName == 'FIGURE') {
-            list.push(i)
-        }
-    }
-
-    /*Attrs:
-    tagname (we used the outerHTML, which gets all the tag and its content), Id, class, type, name, aria-label, role, title, placeholder*/
-
-    for (let i of list) {
-        let itemTagName = i.outerHTML
-        let itemAlt = i.getAttribute('alt')
-        let itemHref = i.getAttribute('href')
-        let itemClass = i.getAttribute('class')
-        let itemId = i.getAttribute('id')
-        let itemType = i.getAttribute('type')
-        let itemName = i.getAttribute('name')
-        let itemAriaLabel = i.getAttribute('aria-label')
-        let itemRole = i.getAttribute('role')
-        let itemTitle = i.getAttribute('title')
-        let itemPlaceholder = i.getAttribute('placeholder')
-
-        console.log(itemTagName)
-        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemHref) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
-            items.push(i)
-
-    }
-    console.log(items)
-
-    let index = -1;
-
-    window.addEventListener("keydown", function (e) {
-
-        if (funcI == true) {
-
-            
-            if (e.key === "ArrowRight") {
-                index++
-                if (index > items.length)
-                    index--
-
-                let item = (items[index])
-                item.style.outline = 'none'
-                item.style.border = '5px solid red'
-
-                if (index >= 1)
-                    (items[index - 1]).style.border = 'none'
-
-                item.focus()
-            }
-
-            if (e.key === "ArrowLeft") {
-                index--
-                if (index < 0)
-                    index = 0
-
-                let item = (items[index])
-                item.style.outline = 'none'
-                item.style.border = '5px solid red'
-                
-                if (index >=0)
-                    (items[index + 1]).style.border = 'none'
-                item.focus()
-            }
-
-        }
-    })
-}
-
-function navigatePlayables() {
-    console.log('MODO - NAVEGAÇÃO POR MÍDIAS DE REPRODUÇÃO')
-    var utterThis = new SpeechSynthesisUtterance("MODO NAVEGAÇÃO POR MÍDIAS DE REPRODUÇÃO")
-    synth.speak(utterThis)
-
-    let list = []
-    let items = []
-
-    let regex = new RegExp('(video+)|(audio+)|(vid+)|(vídeo+)|(track+)', 'ig')
-
-    for (let i of document.body.querySelectorAll('*')) {
-        if (i.nodeName == 'VIDEO' || i.nodeName == 'AUDIO' || i.nodeName == 'TRACK') {
-            list.push(i)
-        }
-    }
-
-    /*Attrs:
-    tagname (we used the outerHTML, which gets all the tag and its content), Id, class, type, name, aria-label, role, title, placeholder*/
-
-    for (let i of list) {
-        let itemTagName = i.outerHTML
-        let itemClass = i.getAttribute('class')
-        let itemId = i.getAttribute('id')
-        let itemType = i.getAttribute('type')
-        let itemName = i.getAttribute('name')
-        let itemAriaLabel = i.getAttribute('aria-label')
-        let itemRole = i.getAttribute('role')
-        let itemTitle = i.getAttribute('title')
-        let itemPlaceholder = i.getAttribute('placeholder')
-
-        console.log(itemTagName)
-        if (regex.test(itemTagName) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
-            items.push(i)
-
-    }
-    console.log(items)
-
-    let index = -1;
-
-    window.addEventListener("keydown", function (e) {
-
-        if (funcV == true) {
-
-            
-            if (e.key === "ArrowRight") {
-                index++
-                if (index > items.length)
-                    index--
-
-                let item = (items[index])
-                item.style.outline = 'none'
-                item.style.border = '5px solid red'
-
-                if (index >= 1)
-                    (items[index - 1]).style.border = 'none'
-
-                item.focus()
-            }
-
-            if (e.key === "ArrowLeft") {
-                index--
-                if (index < 0)
-                    index = 0
-
-                let item = (items[index])
-                item.style.outline = 'none'
-                item.style.border = '5px solid red'
-                
-                if (index >=0)
-                    (items[index + 1]).style.border = 'none'
-                item.focus()
-            }
-        }
-    })
-}
-
-function navigateLogin() {
-    console.log('MODO - NAVEGAÇÃO PARA LOGIN')
-    var utterThis = new SpeechSynthesisUtterance("MODO NAVEGAÇÃO PARA LOGIN")
-    synth.speak(utterThis)
-
-    let list = []
-    let items = []
-
-    let regex = new RegExp('(login+)|(log in+)|(log on+)|(entrar+)|(entre+)|(acessar+)|(acesso+)|(iniciar+)', 'ig')
-
-    for (let i of document.body.querySelectorAll('*')) {
-        if (i.nodeName == 'INPUT' && (i.nodeType == 'TEXT' || i.nodeType == 'EMAIL' || i.nodeType == 'PASSWORD'))
-            list.push(i)
-        if (i.nodeName == 'FORM' || i.nodeName == 'BUTTON' || i.nodeName == 'A')
-            list.push(i)
-    }
-    for (let i of list) {
-        let itemTagName = i.outerHTML
-        let itemAlt = i.getAttribute('alt')
-        let itemHref = i.getAttribute('href')
-        let itemClass = i.getAttribute('class')
-        let itemId = i.getAttribute('id')
-        let itemType = i.getAttribute('type')
-        let itemName = i.getAttribute('name')
-        let itemAriaLabel = i.getAttribute('aria-label')
-        let itemRole = i.getAttribute('role')
-        let itemTitle = i.getAttribute('title')
-        let itemPlaceholder = i.getAttribute('placeholder')
-
-        console.log(itemTagName)
-        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemHref) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
-            items.push(i)
-
-    }
-
-    let index = -1;
-
-    window.addEventListener("keydown", function (e) {
-
-        if (funcL == true) {
-
-            
-            if (e.key === "ArrowRight") {
-                index++
-                if (index > items.length)
-                    index--
-
-                let item = (items[index])
-                item.style.outline = 'none'
-                item.style.border = '5px solid red'
-
-                if (index >= 1)
-                    (items[index - 1]).style.border = 'none'
-
-                item.focus()
-            }
-
-            if (e.key === "ArrowLeft") {
-                index--
-                if (index < 0)
-                    index = 0
-
-                let item = (items[index])
-                item.style.outline = 'none'
-                item.style.border = '5px solid red'
-                
-                if (index >=0)
-                    (items[index + 1]).style.border = 'none'
-                item.focus()
-            }
-        }
-    })
-}
-
-function navigateSearch() {
-
-    console.log('MODO - NAVEGAÇÃO PARA PESQUISA')
-    var utterThis = new SpeechSynthesisUtterance("MODO NAVEGAÇÃO PARA PESQUISA")
-    synth.speak(utterThis)
-
-    let list = []
-    let items = []
-
+function getSearch(param) {
+    console.log('Função getSearch()')
     let regex = new RegExp('(search+)|(pesquisa+)', 'ig')
+    let allElements = []
+    let finalList = []
 
-    for (let i of document.body.querySelectorAll('*')) {
+    for (let i of param.querySelectorAll('*')) {
         if (i.nodeName == 'INPUT' && (i.nodeType == 'TEXT' || i.nodeType == 'SEARCH'))
-            list.push(i)
+            allElements.push(i)
         if (i.nodeName == 'FORM' || i.nodeName == 'BUTTON')
-            list.push(i)
-    }
-    for (let i of list) {
-        let itemTagName = i.outerHTML
-        let itemAlt = i.getAttribute('alt')
-        let itemHref = i.getAttribute('href')
-        let itemClass = i.getAttribute('class')
-        let itemId = i.getAttribute('id')
-        let itemType = i.getAttribute('type')
-        let itemName = i.getAttribute('name')
-        let itemAriaLabel = i.getAttribute('aria-label')
-        let itemRole = i.getAttribute('role')
-        let itemTitle = i.getAttribute('title')
-        let itemPlaceholder = i.getAttribute('placeholder')
+            allElements.push(i)
 
-        console.log(itemTagName)
-        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemHref) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
-            items.push(i)
 
     }
+    for (let j of allElements) {
+        let itemTagName = j.outerHTML
+        let itemAlt = j.getAttribute('alt')
+        let itemClass = j.getAttribute('class')
+        let itemId = j.getAttribute('id')
+        let itemType = j.getAttribute('type')
+        let itemName = j.getAttribute('name')
+        let itemAriaLabel = j.getAttribute('aria-label')
+        let itemRole = j.getAttribute('role')
+        let itemTitle = j.getAttribute('title')
+        let itemPlaceholder = j.getAttribute('placeholder')
 
-    let index = -1;
+        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+            finalList.push(j)
+    }
+    console.log(finalList)
 
-    window.addEventListener("keydown", function (e) {
+    el = finalList[0]
+    try {
+        const elRectangle = el.getBoundingClientRect();
 
-        if (funcL == true) {
+        let coordenadas = elRectangle
+        let tamanhoH = elRectangle.right - elRectangle.left
+        let tamanhoV = elRectangle.bottom - elRectangle.top
 
-           
-            if (e.key === "ArrowRight") {
-                index++
-                if (index > items.length)
-                    index--
+        createSections()
+        let section = getElementSection(elRectangle)
+        let position = getElementPosition(elRectangle)
 
-                let item = (items[index])
-                item.style.outline = 'none'
-                item.style.border = '5px solid red'
+        console.log(coordenadas)
+        console.log(tamanhoH)
+        console.log(tamanhoV)
+        console.log(section)
+        console.log(position)
 
-                if (index >= 1)
-                    (items[index - 1]).style.border = 'none'
+        let resultSearch = [true, coordenadas, tamanhoH, tamanhoV, section, position]
+        return resultSearch
+    } catch (error) {
+        return false
+    }
+}
 
-                item.focus()
-            }
+function getLogin(param) {
+    console.log('Funlão getLogin()')
+    let regex = new RegExp('(login+)|(log in+)|(log on+)|(entrar+)|(entre+)|(acessar+)|(acesso+)|(iniciar+)', 'ig')
+    let allElements = []
+    let finalList = []
 
-            if (e.key === "ArrowLeft") {
-                index--
-                if (index < 0)
-                    index = 0
+    for (let i of param.querySelectorAll('*')) {
+        if (i.nodeName == 'INPUT' && (i.nodeType == 'TEXT' || i.nodeType == 'EMAIL' || i.nodeType == 'PASSWORD'))
+            allElements.push(i)
+        if (i.nodeName == 'FORM' || i.nodeName == 'BUTTON' || i.nodeName == 'A')
+            allElements.push(i)
+    }
+    for (let j of allElements) {
+        let itemTagName = j.outerHTML
+        let itemAlt = j.getAttribute('alt')
+        let itemHref = j.getAttribute('href')
+        let itemClass = j.getAttribute('class')
+        let itemId = j.getAttribute('id')
+        let itemType = j.getAttribute('type')
+        let itemName = j.getAttribute('name')
+        let itemAriaLabel = j.getAttribute('aria-label')
+        let itemRole = j.getAttribute('role')
+        let itemTitle = j.getAttribute('title')
+        let itemPlaceholder = j.getAttribute('placeholder')
 
-                let item = (items[index])
-                item.style.outline = 'none'
-                item.style.border = '5px solid red'
-                
-                if (index >=0)
-                    (items[index + 1]).style.border = 'none'
-                item.focus()
+        if (regex.test(itemTagName) || regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+            finalList.push(j)
+    }
+    console.log(finalList)
+
+    el = finalList[0]
+    try {
+        const elRectangle = el.getBoundingClientRect();
+
+        let coordenadas = elRectangle
+        let tamanhoH = elRectangle.right - elRectangle.left
+        let tamanhoV = elRectangle.bottom - elRectangle.top
+
+        createSections()
+        let section = getElementSection(elRectangle)
+        let position = getElementPosition(elRectangle)
+
+        console.log(coordenadas)
+        console.log(tamanhoH)
+        console.log(tamanhoV)
+        console.log(section)
+        console.log(position)
+
+        let resultLogin = [true, coordenadas, tamanhoH, tamanhoV, section, position]
+        return resultLogin
+    } catch (error) {
+        return false
+    }
+}
+
+//FAZER
+//procurar nav.a.a ou nav.ul.li ou div.ul.li ou div.a.a ou span.ul.li ou span.a.a
+function getMenu(param) {
+    console.log('Função getMenu()')
+    let regex = new RegExp('(menu+)|(nav+)|(section+)|(list+)', 'ig')
+    let menu = []
+    let finalList = []
+
+
+    for (let i of param.querySelectorAll('*')) {
+        if (i.nodeName == 'NAV')
+            finalList.push(i)
+        else if (i.nodeName == 'DIV' || i.nodeName == 'BUTTON' || i.nodeName == 'A' || i.nodeName == 'SPAN' || (i.nodeName = 'UL'))
+            menu.push(i)
+    }
+
+    for (let m of menu) {
+        let itemTagName = m.outerHTML
+        let itemAlt = m.getAttribute('alt')
+        let itemClass = m.getAttribute('class')
+        let itemId = m.getAttribute('id')
+        let itemName = m.getAttribute('name')
+        let itemAriaLabel = m.getAttribute('aria-label')
+        let itemRole = m.getAttribute('role')
+        let itemTitle = m.getAttribute('title')
+
+        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle))
+            finalList.push(m)
+    }
+    console.log(finalList)
+
+    el = finalList[0]
+    try {
+        const elRectangle = el.getBoundingClientRect();
+
+        let coordenadas = elRectangle
+        let tamanhoH = elRectangle.right - elRectangle.left
+        let tamanhoV = elRectangle.bottom - elRectangle.top
+
+        createSections()
+        let section = getElementSection(elRectangle)
+        let position = getElementPosition(elRectangle)
+
+        console.log(coordenadas)
+        console.log(tamanhoH)
+        console.log(tamanhoV)
+        console.log(section)
+        console.log(position)
+
+        return true
+    } catch (error) {
+        return false
+    }
+}
+//class='social'
+//pegar os a e ver se tem um nome (facebook, twitter, linkedin, whatsapp, instagram, youtube)
+function getSocial(param) {
+    console.log('Função getSocial()')
+    let regex = new RegExp('(social+)|(sociais+)|(media+)|(midia+)|(mídia+)', 'ig')
+    let allElements = []
+    let finalList = []
+
+    for (let i of param.querySelectorAll('*')) {
+        if (i.nodeName == 'IMG' || i.nodeName == 'SVG' || i.nodeName == 'FIGURE' || i.nodeName == 'I' || i.nodeName == 'A')
+            allElements.push(i)
+    }
+    for (let j of allElements) {
+        let itemTagName = j.outerHTML
+        let itemAlt = j.getAttribute('alt')
+        let itemClass = j.getAttribute('class')
+        let itemId = j.getAttribute('id')
+        let itemType = j.getAttribute('type')
+        let itemName = j.getAttribute('name')
+        let itemAriaLabel = j.getAttribute('aria-label')
+        let itemRole = j.getAttribute('role')
+        let itemTitle = j.getAttribute('title')
+        let itemPlaceholder = j.getAttribute('placeholder')
+
+        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder)) {
+
+            finalList.push(j)
+            let itemAriaHidden = j.getAttribute('aria-hidden')
+            let itemAriaExpanded = j.getAttribute('aria-expanded')
+
+            if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                finalList.pop(j)
+
+            let itemTabIndex = j.getAttribute('tabindex')
+
+            if (itemTabIndex === '-1') {
+                finalList.pop(j)
             }
         }
-    })
 
+    }
+    console.log(finalList)
+
+    el = finalList[0]
+    try {
+        const elRectangle = el.getBoundingClientRect();
+
+        let coordenadas = elRectangle
+        let tamanhoH = elRectangle.right - elRectangle.left
+        let tamanhoV = elRectangle.bottom - elRectangle.top
+
+        createSections()
+        let section = getElementSection(elRectangle)
+        let position = getElementPosition(elRectangle)
+
+        console.log(coordenadas)
+        console.log(tamanhoH)
+        console.log(tamanhoV)
+        console.log(section)
+        console.log(position)
+
+        let resultMenu = [true, coordenadas, tamanhoH, tamanhoV, section, position]
+        return resultMenu
+    } catch (error) {
+        return false
+    }
 }
 
-function navigateForms() {
+function getForms(param) {
+    console.log('Função getForms()')
+    let finalList = []
 
+    for (let i of param.querySelectorAll('*')) {
+        if (i.nodeName == 'INPUT' || i.nodeName == 'FORM' || (i.nodeName == 'BUTTON' && i.nodeType == 'SUBMIT')) {
+
+            finalList.push(i)
+
+            let itemAriaHidden = i.getAttribute('aria-hidden')
+            let itemAriaExpanded = i.getAttribute('aria-expanded')
+
+            if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                finalList.pop(i)
+
+            let itemTabIndex = i.getAttribute('tabindex')
+
+            if (itemTabIndex === '-1') {
+                finalList.pop(i)
+            }
+        }
+    }
+
+    console.log(finalList)
+
+    el = finalList[0]
+    try {
+        const elRectangle = el.getBoundingClientRect();
+
+        let coordenadas = elRectangle
+        let tamanhoH = elRectangle.right - elRectangle.left
+        let tamanhoV = elRectangle.bottom - elRectangle.top
+
+        createSections()
+        let section = getElementSection(elRectangle)
+        let position = getElementPosition(elRectangle)
+
+        console.log(coordenadas)
+        console.log(tamanhoH)
+        console.log(tamanhoV)
+        console.log(section)
+        console.log(position)
+
+        let resultForms = [true, coordenadas, tamanhoH, tamanhoV, section, position]
+        return resultForms
+    } catch (error) {
+        return false
+    }
 }
 
-function navigateBlocks() {
-    //header, main, footer
-    //use regex to determine divs os sections with terms like main, principal, or things like that
+function getHeader() {
+    console.log('Função getHeader()')
+    let regex = new RegExp('(header+)|(cabecalho+)|(cabeçalho+)', 'ig')
+    let allElements = []
+    let finalList = []
+
+    for (let i of document.body.querySelectorAll('*')) {
+        if (i.nodeName == 'HEADER') {
+            param = document.querySelector('.' + i.getAttribute('class'))
+            console.log(param)
+            let logo = getLogo(param)
+            let login = getLogin(param)
+            let search = getSearch(param)
+            let nav = getMenu(param)
+            let info = [logo, nav, login, search]
+            console.log(info)
+
+            finalList.push(i)
+            return info
+        }
+        else if (i.nodeName == 'DIV')
+            allElements.push(i)
+
+
+    }
+    console.log(allElements)
+
+    for (let j of allElements) {
+        //let itemTagName = j.outerHTML
+        let itemAlt = j.getAttribute('alt')
+        let itemHref = j.getAttribute('href')
+        let itemClass = j.getAttribute('class')
+        let itemId = j.getAttribute('id')
+        let itemType = j.getAttribute('type')
+        let itemName = j.getAttribute('name')
+        let itemAriaLabel = j.getAttribute('aria-label')
+        let itemRole = j.getAttribute('role')
+        let itemTitle = j.getAttribute('title')
+        let itemPlaceholder = j.getAttribute('placeholder')
+
+        if (regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder)) {
+            finalList.push(j)
+            let itemAriaHidden = j.getAttribute('aria-hidden')
+            let itemAriaExpanded = j.getAttribute('aria-expanded')
+
+            if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                finalList.pop(j)
+
+            let itemTabIndex = j.getAttribute('tabindex')
+
+            if (itemTabIndex === '-1') {
+                finalList.pop(j)
+            }
+
+            param = document.querySelector('.' + j.getAttribute('class'))
+            let logo = getLogo(param)
+            let login = getLogin(param)
+            let search = getSearch(param)
+            let nav = getMenu(param)
+            let info = [logo, nav, login, search, media]
+            return info
+        }
+    }
+    console.log(finalList)
 }
 
-function description() {
-    if (funcD == true)
-        window.alert('A página possui um menu principal no canto superior direito com as opções Gmail, Imagens, e um menu com mais opções escondidas. A sessão de login fica à direita. O site tem uma sessão de busca na parte central, com dois botões (Pesquisa Google e, Estou com sorte). Na tela principal, encontramos a logo do site no centro. Por último, abaixo da seção de pesquisa, as opções de linguagem. No rodapé, temos 3 opções: Configurações, Privacidade e, Termos. Essas nos levam à páginas externas de cada item.')
+function getMain() {
+    let regex = new RegExp('(main+)|(principal+)', 'ig')
+    let allElements = []
+    let finalList = []
+
+    for (let i of document.body.querySelectorAll('*')) {
+        if (i.nodeName == 'MAIN' || i.nodeName == 'DIV' || i.nodeName == 'SECTION' || i.nodeName == 'ARTICLE')
+            allElements.push(i)
+    }
+
+    for (let j of allElements) {
+        let itemTagName = j.outerHTML
+        let itemAlt = j.getAttribute('alt')
+        let itemHref = j.getAttribute('href')
+        let itemClass = j.getAttribute('class')
+        let itemId = j.getAttribute('id')
+        let itemType = j.getAttribute('type')
+        let itemName = j.getAttribute('name')
+        let itemAriaLabel = j.getAttribute('aria-label')
+        let itemRole = j.getAttribute('role')
+        let itemTitle = j.getAttribute('title')
+        let itemPlaceholder = j.getAttribute('placeholder')
+
+        if (regex.test(itemTagName) || regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+            finalList.push(j)
+    }
+    console.log(finalList)
+}
+
+function getFooter() {
+    console.log('FUNÇÃO GET FOOTER')
+    let regex = new RegExp('(rodape+)|(footer+)|(rodapé+)', 'ig')
+    let finalList = []
+
+    for (let i of document.body.querySelectorAll('*')) {
+        if (i.nodeName == 'FOOTER') {
+            finalList.push(i)
+            param = document.querySelector('.' + i.getAttribute('class'))
+            console.log(param)
+            let social = getSocial(param)
+            let menu = getMenu(param)
+            let info = [social, menu]
+            return info
+            //div.ul.li.a -> vem do método de menu
+        }
+        else if (i.nodeName == 'DIV') {
+
+            let itemAlt = i.getAttribute('alt')
+            let itemHref = i.getAttribute('href')
+            let itemClass = i.getAttribute('class')
+            let itemId = i.getAttribute('id')
+            let itemType = i.getAttribute('type')
+            let itemName = i.getAttribute('name')
+            let itemAriaLabel = i.getAttribute('aria-label')
+            let itemRole = i.getAttribute('role')
+            let itemTitle = i.getAttribute('title')
+            let itemPlaceholder = i.getAttribute('placeholder')
+
+            if (regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder)) {
+                finalList.push(i)
+
+                let itemAriaHidden = i.getAttribute('aria-hidden')
+                let itemAriaExpanded = i.getAttribute('aria-expanded')
+
+                if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                    finalList.pop(i)
+
+                let itemTabIndex = i.getAttribute('tabindex')
+
+                if (itemTabIndex === '-1') {
+                    finalList.pop(i)
+                }
+
+                console.log(i)
+                console.log(i.getAttribute('class'))
+                console.log(i.getAttribute('id'))
+                param = document.querySelector('.' + i.getAttribute('class'))
+            }
+            let social = getSocial(param)
+            let menu = getMenu(param)
+            let form = getForms(param)
+            let info = [social, menu, form]
+            console.log(info)
+            return info
+        }
+    }
+    console.log(finalList)
+}
+
+//FAZER
+//ESSA LÓGICA DE CHECAGEM DE ELEMENTOS EM CADA BLOCO ESTÁ FUNCIONANDO, PODEMOS ACESSAR OS ARRAYS E CHECAR PARA CADA ELEMENTO.
+function generateDescription() {
+    let desc = []
+    let header = getHeader()
+    let footer = getFooter()
+    console.log('Header   -->\n'+'\nLogo -->'+header[0]+'\nNav -->'+header[1]+'\nLogin -->'+header[2]
+    +'\nSearch -->'+header[3])
+    console.log('Footer   -->'+footer[0])
+
+    function checkHeader(){
+        if (header[0][0]==true)
+            desc.push('possui uma logo')
+    }
 
 
-    //FIX THIS!!!
-    // modal = document.createElement('div')
-    // modal.class = 'modal-body'
-    // modal.id = 'modal-body'
 
-    // modal.innerText = "A página possui um menu principal no canto superior direito com as opções Gmail, Imagens, e um menu com mais opções escondidas. A sessão de login fica à direita. <br><br>O site tem uma sessão de busca na parte central, com dois botões (Pesquisa Google e, Estou com sorte). <br><br> Na tela principal, encontramos a logo do site no centro. Por último, abaixo da seção de pesquisa, as opções de linguagem. <br><br> No rodapé, temos 3 opções: Configurações, Privacidade e, Termos. Essas nos levam à páginas externas de cada item. <br><br>"
-    // modal.style.display = "hidden"
-    // modal.style.position = "fixed"
-    // modal.style.zindex = "1"
-    // modal.style.paddingtop = "5px"
-    // modal.style.width = "100%"
-    // modal.style.height = "100%"
-    // modal.style.overflow = "auto"
+    checkHeader()
+    let description = ('O cabeçalho da página, '+desc[0])
+    console.log(description)
+}
+
+window.onload = function () {
+    generateDescription()
 }

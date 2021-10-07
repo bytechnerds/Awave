@@ -16,10 +16,6 @@
     "permissions":["tabs"],
     "browser_action":{
         "default_title":"Awave",
-        "default_icon":"logo128.png",
-        "default_popup":"popup.html"
-    },
-    "options_ui": {
-        "page": "listaAtalhos.html"
-      }
+        "default_icon":"logo128.png"
+    }
 }
