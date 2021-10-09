@@ -48,16 +48,14 @@ function getElementSection(elRectangle) {
             return 'Canto Esquerdo Central'
         else
             return 'Canto Esquerdo Inferior'
-    }
-    else if (Math.sign((elRectangle.left - w2[1]) < 0) && (elRectangle.right - w2[1] < 100)) {
+    } else if (Math.sign((elRectangle.left - w2[1]) < 0) && (elRectangle.right - w2[1] < 100)) {
         if (Math.sign((elRectangle.bottom - w1[1]) < 1))
             return 'Centro Superior'
         else if (Math.sign((elRectangle.bottom - w2[1]) < 1))
             return 'Centro'
         else
             return 'Centro Inferior'
-    }
-    else {
+    } else {
         if (Math.sign((elRectangle.bottom - w1[1]) < 1))
             return 'Canto Direito Superior'
         else if (Math.sign((elRectangle.bottom - w2[1]) < 1))
@@ -69,7 +67,7 @@ function getElementSection(elRectangle) {
 
 function getDomain() {
     return domain = window.location.hostname.split('.').slice(-3).join('.')
-    //return domain = document.title
+        //return domain = document.title
 }
 
 function getLogo() {
@@ -99,7 +97,7 @@ function getLogo() {
 
         let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
         for (let i of finalList) {
-            
+
             let itemAlt = i.getAttribute('alt')
             let itemHref = i.getAttribute('href')
             let itemClass = i.getAttribute('class')
@@ -163,7 +161,7 @@ function getSearch() {
             finalList.push(j)
         let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
         for (let i of finalList) {
-            
+
             let itemAlt = i.getAttribute('alt')
             let itemHref = i.getAttribute('href')
             let itemClass = i.getAttribute('class')
@@ -227,7 +225,7 @@ function getLogin() {
             finalList.push(j)
         let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
         for (let i of finalList) {
-            
+
             let itemAlt = i.getAttribute('alt')
             let itemHref = i.getAttribute('href')
             let itemClass = i.getAttribute('class')
@@ -291,7 +289,7 @@ function getMenu() {
 
         let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
         for (let i of finalList) {
-            
+
             let itemAlt = i.getAttribute('alt')
             let itemHref = i.getAttribute('href')
             let itemClass = i.getAttribute('class')
@@ -354,7 +352,7 @@ function getSocial() {
             finalList.push(j)
             let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
             for (let i of finalList) {
-                
+
                 let itemAlt = i.getAttribute('alt')
                 let itemHref = i.getAttribute('href')
                 let itemClass = i.getAttribute('class')
@@ -402,7 +400,7 @@ function getForms() {
         finalList.push(i)
         let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
         for (let i of finalList) {
-            
+
             let itemAlt = i.getAttribute('alt')
             let itemHref = i.getAttribute('href')
             let itemClass = i.getAttribute('class')
@@ -452,9 +450,8 @@ function getHeader() {
             headerEl = i
             let resultHeader = [true, headerEl]
             return resultHeader
-        }
-        else if (i.nodeName == 'DIV') {
-        
+        } else if (i.nodeName == 'DIV') {
+
             let itemAlt = i.getAttribute('alt')
             let itemHref = i.getAttribute('href')
             let itemClass = i.getAttribute('class')
@@ -470,7 +467,7 @@ function getHeader() {
                 finalList.push(i)
                 let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
                 for (let i of finalList) {
-                    
+
                     let itemAlt = i.getAttribute('alt')
                     let itemHref = i.getAttribute('href')
                     let itemClass = i.getAttribute('class')
@@ -508,12 +505,70 @@ function getHeader() {
     }
 }
 
-//FAZER ESSE MÉTODO
+//Pega tudo que não for footer ou header ou meta tags
 function getMain() {
-    let regex = new RegExp('(main+)|(principal+)', 'ig')
-    let allElements = []
-    let finalList = []
-}
+    //let regex = new RegExp('(main+)|(principal+)', 'ig')
+    let regex = new RegExp('(rodape+)|(footer+)|(rodapé+)|(header+)|(cabecalho+)|(cabeçalho+)', 'ig')
+    let finalList = []​
+    for (let i of document.body.querySelectorAll('*')) {
+        if (!(i.nodeName === 'FOOTER') && (!(i.nodeName === 'HEADER')) && (!(i.nodeName === 'STYLE'))) {
+            finalList.push(i)
+        } else if (i.nodeName == 'DIV') {
+
+            let itemAlt = i.getAttribute('alt')
+            let itemHref = i.getAttribute('href')
+            let itemClass = i.getAttribute('class')
+            let itemId = i.getAttribute('id')
+            let itemType = i.getAttribute('type')
+            let itemName = i.getAttribute('name')
+            let itemAriaLabel = i.getAttribute('aria-label')
+            let itemRole = i.getAttribute('role')
+            let itemTitle = i.getAttribute('title')
+            let itemPlaceholder = i.getAttribute('placeholder')
+
+            if (!(regex.test(itemHref)) || !(regex.test(itemAlt)) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder)) {
+                finalList.push(i)
+
+                let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
+                for (let i of finalList) {
+
+                    let itemAlt = i.getAttribute('alt')
+                    let itemHref = i.getAttribute('href')
+                    let itemClass = i.getAttribute('class')
+                    let itemId = i.getAttribute('id')
+                    let itemType = i.getAttribute('type')
+                    let itemName = i.getAttribute('name')
+                    let itemAriaLabel = i.getAttribute('aria-label')
+                    let itemRole = i.getAttribute('role')
+                    let itemTitle = i.getAttribute('title')
+                    let itemPlaceholder = i.getAttribute('placeholder')
+
+                    if (regex2.test(itemAlt) || regex2.test(itemHref) || regex2.test(itemClass) || regex2.test(itemId) || regex2.test(itemType) || regex2.test(itemName) || regex2.test(itemAriaLabel) || regex2.test(itemRole) || regex2.test(itemTitle) || regex2.test(itemPlaceholder))
+                        finalList.pop(i)
+
+                    let itemAriaHidden = i.getAttribute('aria-hidden')
+                    let itemAriaExpanded = i.getAttribute('aria-expanded')
+
+                    if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                        finalList.pop(i)
+
+                    let itemTabIndex = i.getAttribute('tabindex')
+
+                    if (itemTabIndex == '-1') {
+                        console.log(i + " " + itemTabIndex)
+                        finalList.pop(i)
+                    }
+                }
+                mainEl = finalList[0]
+                let resultMain = [true, footerEl]
+                return resultMain
+            }
+        }
+    }
+    console.log(finalList)
+}​
+getMain()
+
 
 function getFooter() {
     let regex = new RegExp('(rodape+)|(footer+)|(rodapé+)', 'ig')
@@ -526,8 +581,7 @@ function getFooter() {
             footerEl = i
             let resultFooter = [true, footerEl]
             return resultFooter
-        }
-        else if (i.nodeName == 'DIV') {
+        } else if (i.nodeName == 'DIV') {
 
             let itemAlt = i.getAttribute('alt')
             let itemHref = i.getAttribute('href')
@@ -545,7 +599,7 @@ function getFooter() {
 
                 let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
                 for (let i of finalList) {
-                    
+
                     let itemAlt = i.getAttribute('alt')
                     let itemHref = i.getAttribute('href')
                     let itemClass = i.getAttribute('class')
@@ -606,7 +660,7 @@ function generateDescription() {
         getElementPosition(logoRect)
 
 
-        desc.push('possui uma logo, localizada no ' + getElementSection(logoRect))
+        desc.push('Há também uma logo, localizada no ' + getElementSection(logoRect))
     }
 
     let login = getLogin()
@@ -617,7 +671,7 @@ function generateDescription() {
         getElementPosition(loginRect)
 
 
-        desc.push('botão de login, localizado no ' + getElementSection(loginRect))
+        desc.push('O botão de login, fica no ' + getElementSection(loginRect))
     }
 
     let search = getSearch()
@@ -627,7 +681,7 @@ function generateDescription() {
         const searchRect = search[1].getBoundingClientRect()
         getElementPosition(searchRect)
 
-        desc.push('barra de pesquisa, localizada no ' + getElementSection(searchRect))
+        desc.push('Já a barra de pesquisa, está no ' + getElementSection(searchRect))
     }
 
     let menu = getMenu()
@@ -638,7 +692,7 @@ function generateDescription() {
         getElementPosition(menuRect)
 
 
-        desc.push('possui um menu, no ' + getElementSection(menuRect))
+        desc.push('Além disso, possui um menu, no ' + getElementSection(menuRect))
     }
 
     let social = getSocial()
@@ -649,7 +703,7 @@ function generateDescription() {
         getElementPosition(socialRect)
 
 
-        desc.push('possui links para redes sociais, no ' + getElementSection(socialRect) + ' da página.')
+        desc.push('você encontra também links para redes sociais, no ' + getElementSection(socialRect) + ' da página.')
     }
 
     let forms = getForms()
@@ -709,7 +763,7 @@ function generateDescription() {
     // bg.append(modal)
     // document.body.append(bg)
 
-    document.onkeyup = function (e) {
+    document.onkeyup = function(e) {
         console.log(`KeyboardEvent: key='${e.key}' | code='${e.code}'`)
 
         if (e.ctrlKey && e.altKey && e.code == 'KeyD') {
@@ -731,6 +785,6 @@ function generateDescription() {
     }
 }
 
-window.onload = function () {
-    setTimeout(function () { generateDescription(); }, 1000);
+window.onload = function() {
+    setTimeout(function() { generateDescription(); }, 1000);
 }
