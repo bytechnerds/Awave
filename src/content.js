@@ -68,24 +68,22 @@ function getElementSection(elRectangle) {
 }
 
 function getDomain() {
-    return domain = window.location.hostname.split('.').slice(-2).join('.')
+    return domain = window.location.hostname.split('.').slice(-3).join('.')
     //return domain = document.title
 }
 
-function getLogo(param) {
+function getLogo() {
     let regex = new RegExp('(logo+)', 'ig')
     let allElements = []
     let finalList = []
 
-    for (let i of param.querySelectorAll('img, svg, figure, i, a')) {
+    for (let i of document.querySelectorAll('a, img, svg, figure, i')) {
         allElements.push(i)
     }
 
     console.log(allElements)
-    console.log(allElements.length)
 
     for (let j of allElements) {
-        let itemTagName = j.outerHTML
         let itemAlt = j.getAttribute('alt')
         let itemClass = j.getAttribute('class')
         let itemId = j.getAttribute('id')
@@ -96,12 +94,43 @@ function getLogo(param) {
         let itemTitle = j.getAttribute('title')
         let itemPlaceholder = j.getAttribute('placeholder')
 
-        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+        if (regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
             finalList.push(j)
-    }
-    console.log(finalList[0])
 
+        let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
+        for (let i of finalList) {
+            
+            let itemAlt = i.getAttribute('alt')
+            let itemHref = i.getAttribute('href')
+            let itemClass = i.getAttribute('class')
+            let itemId = i.getAttribute('id')
+            let itemType = i.getAttribute('type')
+            let itemName = i.getAttribute('name')
+            let itemAriaLabel = i.getAttribute('aria-label')
+            let itemRole = i.getAttribute('role')
+            let itemTitle = i.getAttribute('title')
+            let itemPlaceholder = i.getAttribute('placeholder')
+
+            if (regex2.test(itemAlt) || regex2.test(itemHref) || regex2.test(itemClass) || regex2.test(itemId) || regex2.test(itemType) || regex2.test(itemName) || regex2.test(itemAriaLabel) || regex2.test(itemRole) || regex2.test(itemTitle) || regex2.test(itemPlaceholder))
+                finalList.pop(i)
+
+            let itemAriaHidden = i.getAttribute('aria-hidden')
+            let itemAriaExpanded = i.getAttribute('aria-expanded')
+
+            if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                finalList.pop(i)
+
+            let itemTabIndex = i.getAttribute('tabindex')
+
+            if (itemTabIndex == '-1') {
+                console.log(i + " " + itemTabIndex)
+                finalList.pop(i)
+            }
+        }
+    }
+    console.log(finalList)
     el = finalList[0]
+
     try {
         let resultLogo = [true, el]
         return resultLogo
@@ -110,17 +139,16 @@ function getLogo(param) {
     }
 }
 
-function getSearch(param) {
+function getSearch() {
     let regex = new RegExp('(search+)|(pesquisa+)', 'ig')
     let allElements = []
     let finalList = []
 
-    for (let i of param.querySelectorAll("input[type='text'], input[type='search'] , form, button")) {
+    for (let i of document.querySelectorAll("input[type='text'], input[type='search'] , form, button")) {
         allElements.push(i)
     }
 
     for (let j of allElements) {
-        let itemTagName = j.outerHTML
         let itemAlt = j.getAttribute('alt')
         let itemClass = j.getAttribute('class')
         let itemId = j.getAttribute('id')
@@ -131,8 +159,38 @@ function getSearch(param) {
         let itemTitle = j.getAttribute('title')
         let itemPlaceholder = j.getAttribute('placeholder')
 
-        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+        if (regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
             finalList.push(j)
+        let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
+        for (let i of finalList) {
+            
+            let itemAlt = i.getAttribute('alt')
+            let itemHref = i.getAttribute('href')
+            let itemClass = i.getAttribute('class')
+            let itemId = i.getAttribute('id')
+            let itemType = i.getAttribute('type')
+            let itemName = i.getAttribute('name')
+            let itemAriaLabel = i.getAttribute('aria-label')
+            let itemRole = i.getAttribute('role')
+            let itemTitle = i.getAttribute('title')
+            let itemPlaceholder = i.getAttribute('placeholder')
+
+            if (regex2.test(itemAlt) || regex2.test(itemHref) || regex2.test(itemClass) || regex2.test(itemId) || regex2.test(itemType) || regex2.test(itemName) || regex2.test(itemAriaLabel) || regex2.test(itemRole) || regex2.test(itemTitle) || regex2.test(itemPlaceholder))
+                finalList.pop(i)
+
+            let itemAriaHidden = i.getAttribute('aria-hidden')
+            let itemAriaExpanded = i.getAttribute('aria-expanded')
+
+            if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                finalList.pop(i)
+
+            let itemTabIndex = i.getAttribute('tabindex')
+
+            if (itemTabIndex == '-1') {
+                console.log(i + " " + itemTabIndex)
+                finalList.pop(i)
+            }
+        }
     }
 
     el = finalList[0]
@@ -144,17 +202,16 @@ function getSearch(param) {
     }
 }
 
-function getLogin(param) {
+function getLogin() {
     let regex = new RegExp('(login+)|(log in+)|(log on+)|(entrar+)|(entre+)|(acessar+)|(acesso+)|(iniciar+)', 'ig')
     let allElements = []
     let finalList = []
 
-    for (let i of param.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], form, button, a')) {
+    for (let i of document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], form, button, a')) {
         allElements.push(i)
 
     }
     for (let j of allElements) {
-        let itemTagName = j.outerHTML
         let itemAlt = j.getAttribute('alt')
         let itemHref = j.getAttribute('href')
         let itemClass = j.getAttribute('class')
@@ -166,8 +223,38 @@ function getLogin(param) {
         let itemTitle = j.getAttribute('title')
         let itemPlaceholder = j.getAttribute('placeholder')
 
-        if (regex.test(itemTagName) || regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
+        if (regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
             finalList.push(j)
+        let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
+        for (let i of finalList) {
+            
+            let itemAlt = i.getAttribute('alt')
+            let itemHref = i.getAttribute('href')
+            let itemClass = i.getAttribute('class')
+            let itemId = i.getAttribute('id')
+            let itemType = i.getAttribute('type')
+            let itemName = i.getAttribute('name')
+            let itemAriaLabel = i.getAttribute('aria-label')
+            let itemRole = i.getAttribute('role')
+            let itemTitle = i.getAttribute('title')
+            let itemPlaceholder = i.getAttribute('placeholder')
+
+            if (regex2.test(itemAlt) || regex2.test(itemHref) || regex2.test(itemClass) || regex2.test(itemId) || regex2.test(itemType) || regex2.test(itemName) || regex2.test(itemAriaLabel) || regex2.test(itemRole) || regex2.test(itemTitle) || regex2.test(itemPlaceholder))
+                finalList.pop(i)
+
+            let itemAriaHidden = i.getAttribute('aria-hidden')
+            let itemAriaExpanded = i.getAttribute('aria-expanded')
+
+            if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                finalList.pop(i)
+
+            let itemTabIndex = i.getAttribute('tabindex')
+
+            if (itemTabIndex == '-1') {
+                console.log(i + " " + itemTabIndex)
+                finalList.pop(i)
+            }
+        }
     }
 
     el = finalList[0]
@@ -179,13 +266,13 @@ function getLogin(param) {
     }
 }
 
-function getMenu(param) {
+function getMenu() {
     let regex = new RegExp('(menu+)|(nav+)|(section+)|(list+)', 'ig')
     let allElements = []
     let finalList = []
 
 
-    for (let i of param.querySelectorAll('nav, div, button, a, span, ul')) {
+    for (let i of document.querySelectorAll('nav, div, button, a, span, ul')) {
         allElements.push(i)
     }
 
@@ -199,8 +286,39 @@ function getMenu(param) {
         let itemRole = m.getAttribute('role')
         let itemTitle = m.getAttribute('title')
 
-        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle))
+        if (regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle))
             finalList.push(m)
+
+        let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
+        for (let i of finalList) {
+            
+            let itemAlt = i.getAttribute('alt')
+            let itemHref = i.getAttribute('href')
+            let itemClass = i.getAttribute('class')
+            let itemId = i.getAttribute('id')
+            let itemType = i.getAttribute('type')
+            let itemName = i.getAttribute('name')
+            let itemAriaLabel = i.getAttribute('aria-label')
+            let itemRole = i.getAttribute('role')
+            let itemTitle = i.getAttribute('title')
+            let itemPlaceholder = i.getAttribute('placeholder')
+
+            if (regex2.test(itemAlt) || regex2.test(itemHref) || regex2.test(itemClass) || regex2.test(itemId) || regex2.test(itemType) || regex2.test(itemName) || regex2.test(itemAriaLabel) || regex2.test(itemRole) || regex2.test(itemTitle) || regex2.test(itemPlaceholder))
+                finalList.pop(i)
+
+            let itemAriaHidden = i.getAttribute('aria-hidden')
+            let itemAriaExpanded = i.getAttribute('aria-expanded')
+
+            if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                finalList.pop(i)
+
+            let itemTabIndex = i.getAttribute('tabindex')
+
+            if (itemTabIndex == '-1') {
+                console.log(i + " " + itemTabIndex)
+                finalList.pop(i)
+            }
+        }
     }
 
     el = finalList[0]
@@ -212,16 +330,15 @@ function getMenu(param) {
     }
 }
 
-function getSocial(param) {
+function getSocial() {
     let regex = new RegExp('(social+)|(sociais+)|(media+)|(midia+)|(mídia+)', 'ig')
     let allElements = []
     let finalList = []
 
-    for (let i of param.querySelectorAll('img, svg, figure, i, a')) {
+    for (let i of document.querySelectorAll('img, svg, figure, i, a')) {
         allElements.push(i)
     }
     for (let j of allElements) {
-        let itemTagName = j.outerHTML
         let itemAlt = j.getAttribute('alt')
         let itemClass = j.getAttribute('class')
         let itemId = j.getAttribute('id')
@@ -232,19 +349,38 @@ function getSocial(param) {
         let itemTitle = j.getAttribute('title')
         let itemPlaceholder = j.getAttribute('placeholder')
 
-        if (regex.test(itemTagName) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder)) {
+        if (regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder)) {
 
             finalList.push(j)
-            let itemAriaHidden = j.getAttribute('aria-hidden')
-            let itemAriaExpanded = j.getAttribute('aria-expanded')
+            let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
+            for (let i of finalList) {
+                
+                let itemAlt = i.getAttribute('alt')
+                let itemHref = i.getAttribute('href')
+                let itemClass = i.getAttribute('class')
+                let itemId = i.getAttribute('id')
+                let itemType = i.getAttribute('type')
+                let itemName = i.getAttribute('name')
+                let itemAriaLabel = i.getAttribute('aria-label')
+                let itemRole = i.getAttribute('role')
+                let itemTitle = i.getAttribute('title')
+                let itemPlaceholder = i.getAttribute('placeholder')
 
-            if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
-                finalList.pop(j)
+                if (regex2.test(itemAlt) || regex2.test(itemHref) || regex2.test(itemClass) || regex2.test(itemId) || regex2.test(itemType) || regex2.test(itemName) || regex2.test(itemAriaLabel) || regex2.test(itemRole) || regex2.test(itemTitle) || regex2.test(itemPlaceholder))
+                    finalList.pop(i)
 
-            let itemTabIndex = j.getAttribute('tabindex')
+                let itemAriaHidden = i.getAttribute('aria-hidden')
+                let itemAriaExpanded = i.getAttribute('aria-expanded')
 
-            if (itemTabIndex === '-1') {
-                finalList.pop(j)
+                if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                    finalList.pop(i)
+
+                let itemTabIndex = i.getAttribute('tabindex')
+
+                if (itemTabIndex == '-1') {
+                    console.log(i + " " + itemTabIndex)
+                    finalList.pop(i)
+                }
             }
         }
 
@@ -259,22 +395,40 @@ function getSocial(param) {
     }
 }
 
-function getForms(param) {
+function getForms() {
     let finalList = []
 
-    for (let i of param.querySelectorAll('input, form, button[type="submit"]')) {
+    for (let i of document.body.querySelectorAll('input, form, button[type="submit"]')) {
         finalList.push(i)
+        let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
+        for (let i of finalList) {
+            
+            let itemAlt = i.getAttribute('alt')
+            let itemHref = i.getAttribute('href')
+            let itemClass = i.getAttribute('class')
+            let itemId = i.getAttribute('id')
+            let itemType = i.getAttribute('type')
+            let itemName = i.getAttribute('name')
+            let itemAriaLabel = i.getAttribute('aria-label')
+            let itemRole = i.getAttribute('role')
+            let itemTitle = i.getAttribute('title')
+            let itemPlaceholder = i.getAttribute('placeholder')
 
-        let itemAriaHidden = i.getAttribute('aria-hidden')
-        let itemAriaExpanded = i.getAttribute('aria-expanded')
+            if (regex2.test(itemAlt) || regex2.test(itemHref) || regex2.test(itemClass) || regex2.test(itemId) || regex2.test(itemType) || regex2.test(itemName) || regex2.test(itemAriaLabel) || regex2.test(itemRole) || regex2.test(itemTitle) || regex2.test(itemPlaceholder))
+                finalList.pop(i)
 
-        if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
-            finalList.pop(i)
+            let itemAriaHidden = i.getAttribute('aria-hidden')
+            let itemAriaExpanded = i.getAttribute('aria-expanded')
 
-        let itemTabIndex = i.getAttribute('tabindex')
+            if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                finalList.pop(i)
 
-        if (itemTabIndex === '-1') {
-            finalList.pop(i)
+            let itemTabIndex = i.getAttribute('tabindex')
+
+            if (itemTabIndex == '-1') {
+                console.log(i + " " + itemTabIndex)
+                finalList.pop(i)
+            }
         }
     }
 
@@ -290,22 +444,17 @@ function getForms(param) {
 function getHeader() {
     let regex = new RegExp('(header+)|(cabecalho+)|(cabeçalho+)', 'ig')
     let finalList = []
+    let headerEl
 
     for (let i of document.body.querySelectorAll('*')) {
         if (i.nodeName == 'HEADER') {
-            param = i
-            console.log(param)
-            let logo = getLogo(param)
-            let login = getLogin(param)
-            let search = getSearch(param)
-            let nav = getMenu(param)
-            let info = [logo, nav, login, search]
-
             finalList.push(i)
-            return info
+            headerEl = i
+            let resultHeader = [true, headerEl]
+            return resultHeader
         }
         else if (i.nodeName == 'DIV') {
-            //let itemTagName = j.outerHTML
+        
             let itemAlt = i.getAttribute('alt')
             let itemHref = i.getAttribute('href')
             let itemClass = i.getAttribute('class')
@@ -319,74 +468,64 @@ function getHeader() {
 
             if (regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder)) {
                 finalList.push(i)
-                let itemAriaHidden = i.getAttribute('aria-hidden')
-                let itemAriaExpanded = i.getAttribute('aria-expanded')
+                let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
+                for (let i of finalList) {
+                    
+                    let itemAlt = i.getAttribute('alt')
+                    let itemHref = i.getAttribute('href')
+                    let itemClass = i.getAttribute('class')
+                    let itemId = i.getAttribute('id')
+                    let itemType = i.getAttribute('type')
+                    let itemName = i.getAttribute('name')
+                    let itemAriaLabel = i.getAttribute('aria-label')
+                    let itemRole = i.getAttribute('role')
+                    let itemTitle = i.getAttribute('title')
+                    let itemPlaceholder = i.getAttribute('placeholder')
 
-                if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
-                    finalList.pop(i)
+                    if (regex2.test(itemAlt) || regex2.test(itemHref) || regex2.test(itemClass) || regex2.test(itemId) || regex2.test(itemType) || regex2.test(itemName) || regex2.test(itemAriaLabel) || regex2.test(itemRole) || regex2.test(itemTitle) || regex2.test(itemPlaceholder))
+                        finalList.pop(i)
 
-                let itemTabIndex = i.getAttribute('tabindex')
+                    let itemAriaHidden = i.getAttribute('aria-hidden')
+                    let itemAriaExpanded = i.getAttribute('aria-expanded')
 
-                if (itemTabIndex === '-1') {
-                    finalList.pop(i)
+                    if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                        finalList.pop(i)
+
+                    let itemTabIndex = i.getAttribute('tabindex')
+
+                    if (itemTabIndex == '-1') {
+                        console.log(i + " " + itemTabIndex)
+                        finalList.pop(i)
+                    }
                 }
 
-                param = i
-                let logo = getLogo(param)
-                let login = getLogin(param)
-                let search = getSearch(param)
-                let nav = getMenu(param)
-                let info = [logo, nav, login, search]
-                return info
+                headerEl = finalList[0]
+                let resultHeader = [true, headerEl]
+                return resultHeader
+
             }
         }
     }
 }
 
+//FAZER ESSE MÉTODO
 function getMain() {
     let regex = new RegExp('(main+)|(principal+)', 'ig')
     let allElements = []
     let finalList = []
-
-    for (let i of document.body.querySelectorAll('*')) {
-        if (i.nodeName == 'MAIN' || i.nodeName == 'DIV' || i.nodeName == 'SECTION' || i.nodeName == 'ARTICLE')
-            allElements.push(i)
-    }
-
-    for (let j of allElements) {
-        let itemTagName = j.outerHTML
-        let itemAlt = j.getAttribute('alt')
-        let itemHref = j.getAttribute('href')
-        let itemClass = j.getAttribute('class')
-        let itemId = j.getAttribute('id')
-        let itemType = j.getAttribute('type')
-        let itemName = j.getAttribute('name')
-        let itemAriaLabel = j.getAttribute('aria-label')
-        let itemRole = j.getAttribute('role')
-        let itemTitle = j.getAttribute('title')
-        let itemPlaceholder = j.getAttribute('placeholder')
-
-        if (regex.test(itemTagName) || regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder))
-            finalList.push(j)
-    }
-    console.log(finalList)
 }
 
 function getFooter() {
     let regex = new RegExp('(rodape+)|(footer+)|(rodapé+)', 'ig')
     let finalList = []
+    let footerEl
 
-    for (let i of document.body.querySelectorAll('*')) {
-        if (i.nodeName == 'FOOTER') {
-            param = i
-            let social = getSocial(param)
-            let menu = getMenu(param)
-            let form = getForms(param)
-            let info = [social, menu, form]
-
+    for (let i of document.querySelectorAll('*')) {
+        if (i.nodeName === 'FOOTER') {
             finalList.push(i)
-            return info
-            //div.ul.li.a -> vem do método de menu
+            footerEl = i
+            let resultFooter = [true, footerEl]
+            return resultFooter
         }
         else if (i.nodeName == 'DIV') {
 
@@ -404,158 +543,194 @@ function getFooter() {
             if (regex.test(itemHref) || regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder)) {
                 finalList.push(i)
 
-                let itemAriaHidden = i.getAttribute('aria-hidden')
-                let itemAriaExpanded = i.getAttribute('aria-expanded')
+                let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
+                for (let i of finalList) {
+                    
+                    let itemAlt = i.getAttribute('alt')
+                    let itemHref = i.getAttribute('href')
+                    let itemClass = i.getAttribute('class')
+                    let itemId = i.getAttribute('id')
+                    let itemType = i.getAttribute('type')
+                    let itemName = i.getAttribute('name')
+                    let itemAriaLabel = i.getAttribute('aria-label')
+                    let itemRole = i.getAttribute('role')
+                    let itemTitle = i.getAttribute('title')
+                    let itemPlaceholder = i.getAttribute('placeholder')
 
-                if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
-                    finalList.pop(i)
+                    if (regex2.test(itemAlt) || regex2.test(itemHref) || regex2.test(itemClass) || regex2.test(itemId) || regex2.test(itemType) || regex2.test(itemName) || regex2.test(itemAriaLabel) || regex2.test(itemRole) || regex2.test(itemTitle) || regex2.test(itemPlaceholder))
+                        finalList.pop(i)
 
-                let itemTabIndex = i.getAttribute('tabindex')
+                    let itemAriaHidden = i.getAttribute('aria-hidden')
+                    let itemAriaExpanded = i.getAttribute('aria-expanded')
 
-                if (itemTabIndex === '-1') {
-                    finalList.pop(i)
+                    if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                        finalList.pop(i)
+
+                    let itemTabIndex = i.getAttribute('tabindex')
+
+                    if (itemTabIndex == '-1') {
+                        console.log(i + " " + itemTabIndex)
+                        finalList.pop(i)
+                    }
                 }
-                param = i
+                footerEl = finalList[0]
+                let resultFooter = [true, footerEl]
+                return resultFooter
             }
-
-            let social = getSocial(param)
-            let menu = getMenu(param)
-            let form = getForms(param)
-            let info = [social, menu, form]
-            return info
         }
     }
 }
 
-//ESSA LÓGICA DE CHECAGEM DE ELEMENTOS EM CADA BLOCO ESTÁ FUNCIONANDO, PODEMOS ACESSAR OS ARRAYS E CHECAR PARA CADA ELEMENTO.
-//PRECISAMOS ADICIONAR UM MÉTODO QUE CHEQUE A EXISTÊNCIA DOS PRINCIPAIS BLOCOS
+
 function generateDescription() {
+    createSections()
+    let desc = []
+
     let domain = getDomain()
+
     let header = getHeader()
+    if (header[0] == true) {
+        console.log(header)
+
+        const headerRect = header[1].getBoundingClientRect()
+        getElementPosition(headerRect)
+
+        desc.push('possui um cabeçalho.')
+    }
+
+    let logo = getLogo()
+    if (logo[0] == true) {
+        console.log(logo)
+
+        const logoRect = logo[1].getBoundingClientRect()
+        getElementPosition(logoRect)
+
+
+        desc.push('possui uma logo, localizada no ' + getElementSection(logoRect))
+    }
+
+    let login = getLogin()
+    if (logo[0] == true) {
+        console.log(login)
+
+        const loginRect = login[1].getBoundingClientRect()
+        getElementPosition(loginRect)
+
+
+        desc.push('botão de login, localizado no ' + getElementSection(loginRect))
+    }
+
+    let search = getSearch()
+    if (search[0] == true) {
+        console.log(search)
+
+        const searchRect = search[1].getBoundingClientRect()
+        getElementPosition(searchRect)
+
+        desc.push('barra de pesquisa, localizada no ' + getElementSection(searchRect))
+    }
+
+    let menu = getMenu()
+    if (menu[0] == true) {
+        console.log(menu)
+
+        const menuRect = menu[1].getBoundingClientRect()
+        getElementPosition(menuRect)
+
+
+        desc.push('possui um menu, no ' + getElementSection(menuRect))
+    }
+
+    let social = getSocial()
+    if (social[0] == true) {
+        console.log(social)
+
+        const socialRect = social[1].getBoundingClientRect()
+        getElementPosition(socialRect)
+
+
+        desc.push('possui links para redes sociais, no ' + getElementSection(socialRect) + ' da página.')
+    }
+
+    let forms = getForms()
+    if (forms[0] == true) {
+        console.log(forms)
+
+        const formsRect = forms[1].getBoundingClientRect()
+        getElementPosition(formsRect)
+
+        //@MATHEUS - NÃO SEI COMO VAMOS COLOCAR AQUI O NOSSO CONTEXTO, UM FORM PODE ESTAR INSERIDO EM VÁRIOS TIPOS DE CONTEXTO DIFERENTES... PRECISARIAMOS TALVEZ, PASSAR UMA REGEX PRA ENTENDER SE AQUELE FORM É PRA UMA NEWSLETTER, BUSCA, CADASTRO OU ALGUMA OUTRA COISA... NÃO SEI SE É POSSÍVEL E VIÁVEL FAZER AGORA.
+        desc.push('' + getElementSection(formsRect))
+    }
+
     let footer = getFooter()
+    if (footer[0] == true) {
+        console.log(footer)
 
-    let descHeader = []
-    let descFooter = []
+        const footerRect = footer[1].getBoundingClientRect()
+        getElementPosition(footerRect)
 
-    console.log('Header   -->\n'
-        + '\nLogo -->' + header[0]
-        + '\nNav -->' + header[1]
-        + '\nLogin -->' + header[2]
-        + '\nSearch -->' + header[3])
-
-
-    function checkHeader() {
-        //checkLogo
-        if (header[0][0] == true) {
-            descHeader.push('possui uma logo localizada no')
-
-            let el = header[0][1]
-            console.log(el)
-            const elRectangle = el.getBoundingClientRect()
-
-            let position = getElementPosition(elRectangle)
-            let section = getElementSection(elRectangle)
-            console.log('\n\nNOVA CHECAGEM -- LOGO')
-
-            console.log(position)
-            console.log(section)
-            descHeader.push(section)
-        }
-        //checkNav
-        if (header[1][0] == true) {
-            descHeader.push('possui uma seção de menu localizada no ')
-            let el = header[1][1]
-            console.log(el)
-            const elRectangle = el.getBoundingClientRect()
-
-            let position = getElementPosition(elRectangle)
-            let section = getElementSection(elRectangle)
-            console.log('\n\nNOVA CHECAGEM -- NAV')
-
-            console.log(position)
-            console.log(section)
-            descHeader.push(section)
-        }
-        //checkLogin
-        if (header[2][0] == true) {
-            descHeader.push('possui opção de login localizada no ')
-            let el = header[2][1]
-            console.log(el)
-            const elRectangle = el.getBoundingClientRect()
-
-            let position = getElementPosition(elRectangle)
-            let section = getElementSection(elRectangle)
-            console.log('\n\nNOVA CHECAGEM -- LOGIN')
-
-            console.log(position)
-            console.log(section)
-            descHeader.push(section)
-        }
-        //checkSearch
-        if (header[3][0] == true) {
-            descHeader.push('possui uma seção de procura localizada no ')
-            let el = header[3][1]
-            console.log(el)
-            const elRectangle = el.getBoundingClientRect()
-
-            let position = getElementPosition(elRectangle)
-            let section = getElementSection(elRectangle)
-            console.log('\n\nNOVA CHECAGEM -- PESQUISA')
-
-            console.log(position)
-            console.log(section)
-            descHeader.push(section)
-        }
+        //@MATHEUS - NÓS PRECISAMOS APRESENTAR A LOCALIZAÇÃO DO HEADER E DO FOOTER? ACREDITO QUE JÁ ESTEJA IMPLÍCITO QUANDO FALAMOS QUE É UM CABEÇALHO OU UM RODAPÉ (VOU DEIXAR SEM, E EM ÚLTIMO CASO NÓS ADICIONAMOS DE NOVO)
+        desc.push('possui um rodapé.')
     }
 
-    console.log('Footer   -->\n'
-        + '\nSocial -->' + footer[0]
-        + '\nMenu -->' + footer[1]
-        + '\nForms -->' + footer[2])
+    let description = ('A página ' + desc[0] + desc[1] + desc[2] + desc[3] + desc[4] + desc[5] + desc[6] + desc[7])
 
-    function checkFooter() {
-        //checkSocial
-        if (footer[0][0] == true) {
-            descFooter.push('possui uma seção com links para redes sociais')
-            let el = footer[0][1]
-            console.log(el)
-            const elRectangle = el.getBoundingClientRect();
+    //NÃO CONSEGUIMOS FAZER O NVDA LER O CONTEUDO DA DIV CRIADA AUTOMATICAMENTE, ENTÃO VAMOS CHAMAR UM ALERT PARA FAZER COM QUE ESSE TEXTO SEJA LIDO AUTOMATICAMENTE
+    // let bg
+    // let modal
+    // //tentar adicionar div, dentro de div, para fazer um fundo com transparencia
+    // bg = document.createElement('div')
+    // bg.style.display = "none"
+    // bg.style.position = "fixed"
+    // bg.style.backgroundColor = "rgba(0,0,0,0.6)"
+    // bg.style.width = "100%"
+    // bg.style.height = "100%"
+    // bg.style.zIndex = "500"
+    // bg.style.overflow = "auto"
 
-            let section = getElementSection(elRectangle)
-            let position = getElementPosition(elRectangle)
 
-            console.log('\n\nNOVA CHECAGEM -- SOCIAL')
-            console.log(position)
-            console.log(section)
-            descFooter.push(section)
-        }
-        //checkMenu
-        if (footer[1][0] == true) {
-            descFooter.push('possui uma seção de menu')
-            let el = footer[1][1]
-            console.log(el)
-            const elRectangle = el.getBoundingClientRect();
+    // modal = document.createElement('div')
+    // modal.setAttribute('id','descriptionBox')
+    // modal.setAttribute('class','descriptionBox')
+    // modal.style.display = "none"
+    // modal.style.backgroundColor = "#202020"
+    // modal.style.fontFamily = "Poppins"
+    // modal.style.fontSize = "1.2em"
+    // modal.style.fontWeight = "400"
+    // modal.style.color = "#ffffff"
+    // modal.style.zIndex = "500"
+    // modal.style.padding = "20px"
+    // modal.style.width = "35%"
+    // modal.style.height = "35%"
+    // modal.style.borderRadius = "5%"
+    // modal.style.overflow = "auto"
 
-            let section = getElementSection(elRectangle)
-            let position = getElementPosition(elRectangle)
+    // bg.append(modal)
+    // document.body.append(bg)
 
-            console.log('\n\nNOVA CHECAGEM -- MENU')
-            console.log(position)
-            console.log(section)
-            descFooter.push(section)
-        }
-        //checkForms
-        if (footer[2][0] == true) {
+    document.onkeyup = function (e) {
+        console.log(`KeyboardEvent: key='${e.key}' | code='${e.code}'`)
+
+        if (e.ctrlKey && e.altKey && e.code == 'KeyD') {
+
+            console.log(description)
+            window.alert(description)
+
+            // bg.style.display = "block"
+            // modal.style.display = "block"
+            // modal.innerText = description
+
+            // window.onkeyup = function (e) {
+            //     if (e.ctrlKey && e.code == 'Space') {
+            //         bg.style.display = "none"
+            //         modal.style.display = "none"
+            //     }
+            // }
         }
     }
-
-    checkHeader()
-    checkFooter()
-    let description = ('A página ' + domain + '\n\n' + 'O cabeçalho da página, ' + descHeader[0] + ' ' + descHeader[1] + ' ' + descHeader[2] + ' ' + descHeader[3] + ' ' + descHeader[4] + ' ' + descHeader[5] + ' ' + descHeader[6] + ' ' + descHeader[7] + '\n\n' + 'O rodapé da página,' + ' ' + descFooter[0] + ' ' + descFooter[1] + ' ' + descFooter[2] + ' ' + descFooter[3])
-    console.log(description)
 }
 
 window.onload = function () {
-    setTimeout(function() { createSections(); }, 5000);
-    setTimeout(function() { generateDescription(); }, 5000);
+    setTimeout(function () { generateDescription(); }, 1000);
 }
