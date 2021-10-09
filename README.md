@@ -1,5 +1,5 @@
 # Awave
-Awave is a browser extension that empowers visual impaired people, giving them more autonomy on navigating through the web.
+Awave é uma extensão web que busca empoderar pessoas com deficiências visuais, dando-lhes maior autonomia ao navegar pela web.
 
 COMO USAR: A extensão conta atualmente com a função de descrever páginas. Quando ativada essa função, o código faz uma varredura pelo documento HTML, para a partir de diversas checagens gerar um contexto da página e como ela está organizada, gerando sua descrição.
 
