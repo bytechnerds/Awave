@@ -3,7 +3,7 @@
     "name": "Awave",
     "description": "Awave is a browser extension that empowers visual impaired people, giving them more autonomy on navigating through the web.",
     "author": "byTech",
-    "version": "0.0.1",
+    "version": "1.0",
     "content_scripts":[
         {
             "matches":["<all_urls>"],

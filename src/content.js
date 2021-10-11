@@ -385,6 +385,71 @@ function getSocial() {
     }
 }
 
+function getSocial() {
+    let regex = new RegExp('(social+)|(sociais+)|(media+)|(midia+)|(mídia+)', 'ig')
+    let allElements = []
+    let finalList = []
+
+    for (let i of document.querySelectorAll('img, svg, figure, i, a')) {
+        allElements.push(i)
+    }
+    for (let j of allElements) {
+        let itemAlt = j.getAttribute('alt')
+        let itemClass = j.getAttribute('class')
+        let itemId = j.getAttribute('id')
+        let itemType = j.getAttribute('type')
+        let itemName = j.getAttribute('name')
+        let itemAriaLabel = j.getAttribute('aria-label')
+        let itemRole = j.getAttribute('role')
+        let itemTitle = j.getAttribute('title')
+        let itemPlaceholder = j.getAttribute('placeholder')
+
+        if (regex.test(itemAlt) || regex.test(itemClass) || regex.test(itemId) || regex.test(itemType) || regex.test(itemName) || regex.test(itemAriaLabel) || regex.test(itemRole) || regex.test(itemTitle) || regex.test(itemPlaceholder)) {
+
+            finalList.push(j)
+            let regex2 = new RegExp('(hid+)|(hide+)|(hidden+)', 'ig')
+            for (let i of finalList) {
+
+                let itemAlt = i.getAttribute('alt')
+                let itemHref = i.getAttribute('href')
+                let itemClass = i.getAttribute('class')
+                let itemId = i.getAttribute('id')
+                let itemType = i.getAttribute('type')
+                let itemName = i.getAttribute('name')
+                let itemAriaLabel = i.getAttribute('aria-label')
+                let itemRole = i.getAttribute('role')
+                let itemTitle = i.getAttribute('title')
+                let itemPlaceholder = i.getAttribute('placeholder')
+
+                if (regex2.test(itemAlt) || regex2.test(itemHref) || regex2.test(itemClass) || regex2.test(itemId) || regex2.test(itemType) || regex2.test(itemName) || regex2.test(itemAriaLabel) || regex2.test(itemRole) || regex2.test(itemTitle) || regex2.test(itemPlaceholder))
+                    finalList.pop(i)
+
+                let itemAriaHidden = i.getAttribute('aria-hidden')
+                let itemAriaExpanded = i.getAttribute('aria-expanded')
+
+                if (itemAriaHidden == 'true' || itemAriaExpanded == 'false')
+                    finalList.pop(i)
+
+                let itemTabIndex = i.getAttribute('tabindex')
+
+                if (itemTabIndex == '-1') {
+                    finalList.pop(i)
+                }
+            }
+        }
+
+    }
+
+    el = finalList[0]
+
+    if (el != null && el != undefined) {
+        let resultSocial = [true, el]
+        return resultSocial
+    } else {
+        return false
+    }
+}
+
 function getForms() {
     let finalList = []
 
@@ -612,8 +677,8 @@ function generateDescription() {
     createSections()
     let desc = []
 
-    let domain = getDomain()
-    desc.push(domain)
+    // let domain = getDomain()
+    // desc.push(domain)
 
     let header = getHeader()
     if (header[0] == true) {
@@ -622,7 +687,7 @@ function generateDescription() {
         const headerRect = header[1].getBoundingClientRect()
         getElementPosition(headerRect)
 
-        desc.push('possui um cabeçalho,')
+        desc.push('possui um cabeçalho ')
     }
 
     let logo = getLogo()
@@ -643,7 +708,6 @@ function generateDescription() {
         const loginRect = login[1].getBoundingClientRect()
         getElementPosition(loginRect)
 
-        desc.push()
         desc.push('O botão de login que fica no ' + getElementSection(loginRect))
     }
 
@@ -695,7 +759,7 @@ function generateDescription() {
         const footerRect = footer[1].getBoundingClientRect()
         getElementPosition(footerRect)
 
-        desc.push('E por fim, há um rodapé, ')
+        desc.push('E por fim, há um rodapé')
     }
 
     let social = getSocial()
@@ -712,7 +776,7 @@ function generateDescription() {
     let description = 'A página '
     let result = ''
 
-    desc.join(", ")
+    desc.join(". ")
     result = description.concat(desc)
 
     console.log(result)
